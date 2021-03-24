@@ -31,7 +31,7 @@ function _mapToObj(map) {
  */
 function determinePropertiesToGet (type) {
   const defaultProperties = ['description', 'summary']
-  let result = defaultProperties
+  const result = defaultProperties
   switch (type) {
     case 'API':
       result.push('tags', 'info')
@@ -98,7 +98,7 @@ function logicalIdForPart(location) {
   }
 }
 
-var autoVersion
+let autoVersion
 
 module.exports = function() {
   return {
@@ -193,7 +193,7 @@ module.exports = function() {
           .filter(eventTypes => eventTypes.http && eventTypes.http.documentation)
           .map(eventTypes => eventTypes.http)
           .forEach(currEvent => {
-            let key = functionName + currEvent.method + currEvent.path
+            const key = functionName + currEvent.method + currEvent.path
             documentationObj[key] = currEvent
           })
         return documentationObj

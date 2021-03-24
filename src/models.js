@@ -6,7 +6,7 @@ function replaceModelRefs(restApiId, cfModel) {
     }
 
     function replaceRefs(obj) {
-        for (let key of Object.keys(obj)) {
+        for (const key of Object.keys(obj)) {
             if (key === '$ref') {
                 let match
                 if (match = /{{model:\s*([\-\w]+)}}/.exec(obj[key])) {
@@ -43,7 +43,7 @@ module.exports = {
   createCfModel: function createCfModel(restApiId) {
     return function(model) {
 
-      let cfModel = {
+      const cfModel = {
         Type: 'AWS::ApiGateway::Model',
         Properties: {
           RestApiId: restApiId,

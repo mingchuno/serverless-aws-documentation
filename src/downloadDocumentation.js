@@ -34,7 +34,7 @@ module.exports = {
 
 function getFileExtension(filename) {
   const path = require('path')
-  let ext = path.extname(filename || '').split('.')
+  const ext = path.extname(filename || '').split('.')
 
   return ext[ext.length - 1]
 }

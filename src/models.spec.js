@@ -3,7 +3,7 @@ describe('ServerlessAWSDocumentation', function() {
 
     describe('createCfModel', () => {
         it('should replace model ref with valid URI', () => {
-            let modelInput = {
+            const modelInput = {
                 contentType: 'application/json',
                 name: 'TestModel',
                 schema: {
@@ -16,7 +16,7 @@ describe('ServerlessAWSDocumentation', function() {
                 },
             }
 
-            let modelOutput = objectUnderTest.createCfModel({
+            const modelOutput = objectUnderTest.createCfModel({
                 Ref: 'ApiGatewayRestApi',
             })(modelInput)
             expect(modelOutput).toEqual({
@@ -55,7 +55,7 @@ describe('ServerlessAWSDocumentation', function() {
         })
 
         it('should use provided rest api setting', () => {
-            let modelInput = {
+            const modelInput = {
                 contentType: 'application/json',
                 name: 'TestModel',
                 description: 'Test description',
@@ -69,7 +69,7 @@ describe('ServerlessAWSDocumentation', function() {
                 },
             }
 
-            let modelOutput = objectUnderTest.createCfModel({
+            const modelOutput = objectUnderTest.createCfModel({
                 'Fn::ImportValue': 'PublicApiGatewayRestApi',
             })(modelInput)
             expect(modelOutput).toEqual({
@@ -109,7 +109,7 @@ describe('ServerlessAWSDocumentation', function() {
         })
 
         it('should not mess with non-ref model definitions', () => {
-            let modelInput = {
+            const modelInput = {
                 contentType: 'application/json',
                 name: 'TestModel',
                 schema: {
@@ -122,7 +122,7 @@ describe('ServerlessAWSDocumentation', function() {
                 },
             }
 
-            let modelOutput = objectUnderTest.createCfModel({
+            const modelOutput = objectUnderTest.createCfModel({
                 Ref: 'ApiGatewayRestApi',
             })(modelInput)
             expect(modelOutput).toEqual({
@@ -146,7 +146,7 @@ describe('ServerlessAWSDocumentation', function() {
         })
 
         it('should not crash with null values', () => {
-            let modelInput = {
+            const modelInput = {
                 contentType: 'application/json',
                 name: 'TestModel',
                 schema: {
@@ -160,7 +160,7 @@ describe('ServerlessAWSDocumentation', function() {
                 },
             }
 
-            let modelExecution = function() {
+            const modelExecution = function() {
                 objectUnderTest.createCfModel({
                     Ref: 'ApiGatewayRestApi',
                 })(modelInput)

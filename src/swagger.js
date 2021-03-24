@@ -5,7 +5,7 @@ function replaceSwaggerRefs (swagger) {
     if (!obj) {
       return
     }
-    for (let key of Object.keys(obj)) {
+    for (const key of Object.keys(obj)) {
       if (key === '$ref') {
         let match
         if (match = /#\/definitions\/([\-\w]+)/.exec(obj[key])) {
