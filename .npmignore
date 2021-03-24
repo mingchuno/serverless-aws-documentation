@@ -1,0 +1,5 @@
+.npmignore
+.eslintrc
+example/
+.travis.yml
+src/*.spec.js
