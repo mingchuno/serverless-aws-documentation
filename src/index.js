@@ -1,26 +1,26 @@
-'use strict';
-const documentation = require('./documentation');
-const models = require('./models');
-const swagger = require('./swagger');
-const fs = require('fs');
-const downloadDocumentation = require('./downloadDocumentation');
+'use strict'
+const documentation = require('./documentation')
+const models = require('./models')
+const swagger = require('./swagger')
+const fs = require('fs')
+const downloadDocumentation = require('./downloadDocumentation')
 
 class ServerlessAWSDocumentation {
   constructor(serverless, options) {
-    this.serverless = serverless;
-    this.options = options;
-    this.provider = 'aws';
-    this.fs = fs;
+    this.serverless = serverless
+    this.options = options
+    this.provider = 'aws'
+    this.fs = fs
 
-    Object.assign(this, models);
-    Object.assign(this, swagger);
-    Object.assign(this, documentation());
-    Object.assign(this, downloadDocumentation);
+    Object.assign(this, models)
+    Object.assign(this, swagger)
+    Object.assign(this, documentation())
+    Object.assign(this, downloadDocumentation)
 
-    this.customVars = this.serverless.variables.service.custom;
-    const naming = this.serverless.providers.aws.naming;
-    this.getMethodLogicalId = naming.getMethodLogicalId.bind(naming);
-    this.normalizePath = naming.normalizePath.bind(naming);
+    this.customVars = this.serverless.variables.service.custom
+    const naming = this.serverless.providers.aws.naming
+    this.getMethodLogicalId = naming.getMethodLogicalId.bind(naming)
+    this.normalizePath = naming.normalizePath.bind(naming)
 
     this._beforeDeploy = this.beforeDeploy.bind(this)
     this._afterDeploy = this.afterDeploy.bind(this)
@@ -30,31 +30,88 @@ class ServerlessAWSDocumentation {
       'before:package:finalize': this._beforeDeploy,
       'after:deploy:deploy': this._afterDeploy,
       'downloadDocumentation:downloadDocumentation': this._download
-    };
+    }
 
-    this.documentationParts = [];
+    this.documentationParts = []
 
     this.commands = {
-        downloadDocumentation: {
-            usage: 'Download API Gateway documentation from AWS',
-            lifecycleEvents: [
-              'downloadDocumentation',
-            ],
-            options: {
-                outputFileName: {
-                  required: true,
-                },
-                extensions: {
-                    required: false,
-                },
-            },
+      downloadDocumentation: {
+        usage: 'Download API Gateway documentation from AWS',
+        lifecycleEvents: [ 'downloadDocumentation' ],
+        options: {
+          outputFileName: {
+            required: true
+          },
+          extensions: {
+            required: false
+          }
         }
-    };
+      }
+    }
+
+    //validation rules for 'documentation' property on 'http' event from 'aws' provider
+    const docConfigSchema = {
+      type: 'object',
+      definitions: {
+        models: {
+          type: 'object',
+          patternProperties: { '*/*': { type: 'string' } }
+        },
+        body: {
+          type: 'object',
+          properties: { description: { type: 'string' } }
+        },
+        arrayOfProps: {
+          type: 'array',
+          items: [
+            {
+              type: 'object',
+              properties: { name: { type: 'string' }, description: { type: 'string' } },
+              required: [ 'name' ]
+            }
+          ]
+        }
+      },
+      properties: {
+        documentation: {
+          type: 'object',
+          properties: {
+            summary: { type: 'string' },
+            description: { type: 'string' },
+            tags: { type: 'array', items: [ { type: 'string' } ] },
+            requestBody: { '\'$ref\'': '#/definitions/body' },
+            requestHeaders: { '\'$ref\'': '#/definitions/arrayOfProps' },
+            queryParams: { '\'$ref\'': '#/definitions/arrayOfProps' },
+            pathParams: { '\'$ref\'': '#/definitions/arrayOfProps' },
+            requestModels: { '\'$ref\'': '#/definitions/models' },
+
+            methodResponses: {
+              type: 'array',
+              items: [
+                {
+                  type: 'object',
+                  properties: {
+                    statusCode: { type: 'number' },
+                    responseBody: { '\'$ref\'': '#/definitions/body' },
+                    responseHeaders: { '\'$ref\'': '#/definitions/arrayOfProps' },
+                    responseModels: { '\'$ref\'': '#/definitions/models' }
+                  },
+                  required: [ 'statusCode' ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+
+    //create schema for 'documentation' property
+    this.serverless.configSchemaHandler.defineFunctionEventProperties('aws', 'http', docConfigSchema)
   }
 
   beforeDeploy() {
-    this.customVars = this.serverless.variables.service.custom;
-    if (!(this.customVars && this.customVars.documentation)) return;
+    this.customVars = this.serverless.variables.service.custom
+    if (!(this.customVars && this.customVars.documentation)) return
 
     if (this.customVars.documentation.swagger) {
       // Handle references to models
@@ -85,9 +142,13 @@ class ServerlessAWSDocumentation {
               const path = this.customVars.documentation.paths['/' + event.http.path]
               if (path) {
                 const method = path[event.http.method]
-                const methodDoc = {'requestHeaders': [], 'pathParams': [], 'queryParams': [],
-                  'requestModels': {}}
-                if ( method.parameters ) {
+                const methodDoc = {
+                  requestHeaders: [],
+                  pathParams: [],
+                  queryParams: [],
+                  requestModels: {}
+                }
+                if (method.parameters) {
                   method.parameters.forEach(param => {
                     if (param.in === 'header') {
                       methodDoc['requestHeaders'].push({
@@ -108,28 +169,32 @@ class ServerlessAWSDocumentation {
                         required: param.required
                       })
                     } else if (param.in === 'body') {
-                      methodDoc['requestModels']['application/json'] =
-                        this.extractModel(param, this.customVars.documentation.models);
+                      methodDoc['requestModels']['application/json'] = this.extractModel(
+                        param,
+                        this.customVars.documentation.models
+                      )
                     }
                   })
                 }
 
-                if ( method.responses ) {
+                if (method.responses) {
                   methodDoc['methodResponses'] = []
                   Object.keys(method.responses).map(statusCode => {
-                    const response = method.responses[statusCode];
+                    const response = method.responses[statusCode]
                     const methodResponse = {
-                      statusCode: ""+statusCode,
-                    };
-
-                    if ( response.schema ) {
-                      const responseModels = {};
-                      responseModels['application/json'] =
-                        this.extractModel(response, this.customVars.documentation.models);
-                      methodResponse['responseModels'] = responseModels;
+                      statusCode: '' + statusCode
                     }
-                    methodDoc['methodResponses'].push(methodResponse);
-                  });
+
+                    if (response.schema) {
+                      const responseModels = {}
+                      responseModels['application/json'] = this.extractModel(
+                        response,
+                        this.customVars.documentation.models
+                      )
+                      methodResponse['responseModels'] = responseModels
+                    }
+                    methodDoc['methodResponses'].push(methodResponse)
+                  })
                 }
 
                 event.http.documentation = methodDoc
@@ -140,12 +205,12 @@ class ServerlessAWSDocumentation {
       })
     }
 
-    this.cfTemplate = this.serverless.service.provider.compiledCloudFormationTemplate;
+    this.cfTemplate = this.serverless.service.provider.compiledCloudFormationTemplate
 
     // The default rest API reference
     let restApiId = {
-      Ref: 'ApiGatewayRestApi',
-    };
+      Ref: 'ApiGatewayRestApi'
+    }
 
     // Use the provider API gateway if one has been provided.
     if (this.serverless.service.provider.apiGateway && this.serverless.service.provider.apiGateway.restApiId) {
@@ -153,22 +218,21 @@ class ServerlessAWSDocumentation {
     }
 
     if (this.customVars.documentation.models) {
-      const cfModelCreator = this.createCfModel(restApiId);
+      const cfModelCreator = this.createCfModel(restApiId)
 
       // Add model resources
-      const models = this.customVars.documentation.models.map(cfModelCreator)
-        .reduce((modelObj, model) => {
-          modelObj[`${model.Properties.Name}Model`] = model;
-          return modelObj;
-        }, {});
-      Object.assign(this.cfTemplate.Resources, models);
+      const models = this.customVars.documentation.models.map(cfModelCreator).reduce((modelObj, model) => {
+        modelObj[`${model.Properties.Name}Model`] = model
+        return modelObj
+      }, {})
+      Object.assign(this.cfTemplate.Resources, models)
     }
 
     // Add models to method resources
     this.serverless.service.getAllFunctions().forEach(functionName => {
-      const func = this.serverless.service.getFunction(functionName);
-      func.events.forEach(this.updateCfTemplateFromHttp.bind(this));
-    });
+      const func = this.serverless.service.getFunction(functionName)
+      func.events.forEach(this.updateCfTemplateFromHttp.bind(this))
+    })
 
     // Add documentation parts for HTTP endpoints
     this.updateCfTemplateWithEndpoints(restApiId);
@@ -176,26 +240,30 @@ class ServerlessAWSDocumentation {
     // Add models
     this.cfTemplate.Outputs.AwsDocApiId = {
       Description: 'API ID',
-      Value: restApiId,
-    };
+      Value: restApiId
+    }
   }
 
   afterDeploy() {
-    if (!this.customVars.documentation) return;
-    const stackName = this.serverless.providers.aws.naming.getStackName(this.options.stage);
-    return this.serverless.providers.aws.request('CloudFormation', 'describeStacks', { StackName: stackName },
-      this.options.stage,
-      this.options.region
-    ).then(this._buildDocumentation.bind(this))
-    .catch(err => {
-      if (err === 'documentation version already exists, skipping upload') {
-        return Promise.resolve();
-      }
+    if (!this.customVars.documentation) return
+    const stackName = this.serverless.providers.aws.naming.getStackName(this.options.stage)
+    return this.serverless.providers.aws
+      .request(
+        'CloudFormation',
+        'describeStacks',
+        { StackName: stackName },
+        this.options.stage,
+        this.options.region
+      )
+      .then(this._buildDocumentation.bind(this))
+      .catch(err => {
+        if (err === 'documentation version already exists, skipping upload') {
+          return Promise.resolve()
+        }
 
-      return Promise.reject(err);
-    });
+        return Promise.reject(err)
+      })
   }
-
 }
 
-module.exports = ServerlessAWSDocumentation;
+module.exports = ServerlessAWSDocumentation
