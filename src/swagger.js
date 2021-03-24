@@ -26,7 +26,7 @@ function extractModelDefinition(param, models) {
   if (param.schema['$ref']) {
     let match
     if (match = /#\/definitions\/([\-\w]+)/.exec(param.schema['$ref'])) {
-      return match[1];
+      return match[1]
     }
   } else {
     replaceSwaggerRefs(param.schema)
@@ -36,7 +36,7 @@ function extractModelDefinition(param, models) {
       contentType: 'application/json',
       schema: param.schema
     })
-    return param.name;
+    return param.name
   }
 }
 

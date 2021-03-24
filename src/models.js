@@ -1,14 +1,14 @@
-'use strict';
+'use strict'
 
 function replaceModelRefs(restApiId, cfModel) {
     if (!cfModel.Properties || !cfModel.Properties.Schema || Object.keys(cfModel.Properties.Schema).length == 0) {
-      return cfModel;
+      return cfModel
     }
 
     function replaceRefs(obj) {
         for (let key of Object.keys(obj)) {
             if (key === '$ref') {
-                let match;
+                let match
                 if (match = /{{model:\s*([\-\w]+)}}/.exec(obj[key])) {
                     obj[key] = {
                         'Fn::Join': [
@@ -20,23 +20,23 @@ function replaceModelRefs(restApiId, cfModel) {
                                 match[1]
                             ]
                         ]
-                    };
-                    if (!cfModel.DependsOn) {
-                        cfModel.DependsOn = new Set();
                     }
-                    cfModel.DependsOn.add(match[1]+'Model');
+                    if (!cfModel.DependsOn) {
+                        cfModel.DependsOn = new Set()
+                    }
+                    cfModel.DependsOn.add(match[1]+'Model')
                 }
             } else if (typeof obj[key] === 'object' && obj[key] !== null) {
-                replaceRefs(obj[key]);
+                replaceRefs(obj[key])
             }
         }
     }
 
-    replaceRefs(cfModel.Properties.Schema);
+    replaceRefs(cfModel.Properties.Schema)
     if (cfModel.DependsOn) {
-        cfModel.DependsOn = Array.from(cfModel.DependsOn);
+        cfModel.DependsOn = Array.from(cfModel.DependsOn)
     }
-    return cfModel;
+    return cfModel
 }
 
 module.exports = {
@@ -64,51 +64,51 @@ module.exports = {
   addModelDependencies: function addModelDependencies(models, resource) {
     Object.keys(models).forEach(contentType => {
       if (typeof models[contentType] === 'string') {
-        resource.DependsOn.add(`${models[contentType]}Model`);
+        resource.DependsOn.add(`${models[contentType]}Model`)
       }
-    });
+    })
   },
 
   addMethodResponses: function addMethodResponses(resource, documentation) {
     if (documentation.methodResponses) {
       if (!resource.Properties.MethodResponses) {
-        resource.Properties.MethodResponses = [];
+        resource.Properties.MethodResponses = []
       }
 
       documentation.methodResponses.forEach(response => {
-        const statusCode = response.statusCode.toString();
+        const statusCode = response.statusCode.toString()
         let _response = resource.Properties.MethodResponses
-          .find(originalResponse => originalResponse.StatusCode.toString() === statusCode);
+          .find(originalResponse => originalResponse.StatusCode.toString() === statusCode)
 
         if (!_response) {
           _response = {
             StatusCode: statusCode,
-          };
-
-          if (response.responseHeaders) {
-            const methodResponseHeaders = {};
-            response.responseHeaders.forEach(header => {
-              methodResponseHeaders[`method.response.header.${header.name}`] = true
-            });
-            _response.ResponseParameters = methodResponseHeaders;
           }
 
-          resource.Properties.MethodResponses.push(_response);
+          if (response.responseHeaders) {
+            const methodResponseHeaders = {}
+            response.responseHeaders.forEach(header => {
+              methodResponseHeaders[`method.response.header.${header.name}`] = true
+            })
+            _response.ResponseParameters = methodResponseHeaders
+          }
+
+          resource.Properties.MethodResponses.push(_response)
         }
 
         if (response.responseModels) {
-          _response.ResponseModels = response.responseModels;
-          this.addModelDependencies(_response.ResponseModels, resource);
+          _response.ResponseModels = response.responseModels
+          this.addModelDependencies(_response.ResponseModels, resource)
         }
-      });
+      })
     }
   },
 
   addRequestModels: function addRequestModels(resource, documentation) {
     if (documentation.requestModels && Object.keys(documentation.requestModels).length > 0) {
-      this.addModelDependencies(documentation.requestModels, resource);
-      resource.Properties.RequestModels = documentation.requestModels;
+      this.addModelDependencies(documentation.requestModels, resource)
+      resource.Properties.RequestModels = documentation.requestModels
     }
   }
 
-};
+}

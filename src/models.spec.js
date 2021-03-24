@@ -14,11 +14,11 @@ describe('ServerlessAWSDocumentation', function() {
                         }
                     }
                 }
-            };
+            }
 
             let modelOutput = objectUnderTest.createCfModel({
                 Ref: 'ApiGatewayRestApi',
-            })(modelInput);
+            })(modelInput)
             expect(modelOutput).toEqual({
                 Type: 'AWS::ApiGateway::Model',
                 Properties: {
@@ -51,8 +51,8 @@ describe('ServerlessAWSDocumentation', function() {
                 DependsOn: [
                     'OtherModelNameModel'
                 ]
-            });
-        });
+            })
+        })
 
         it('should use provided rest api setting', () => {
             let modelInput = {
@@ -67,11 +67,11 @@ describe('ServerlessAWSDocumentation', function() {
                         }
                     }
                 }
-            };
+            }
 
             let modelOutput = objectUnderTest.createCfModel({
                 'Fn::ImportValue': 'PublicApiGatewayRestApi',
-            })(modelInput);
+            })(modelInput)
             expect(modelOutput).toEqual({
                 Type: 'AWS::ApiGateway::Model',
                 Properties: {
@@ -105,8 +105,8 @@ describe('ServerlessAWSDocumentation', function() {
                 DependsOn: [
                     'OtherModelNameModel'
                 ]
-            });
-        });
+            })
+        })
 
         it('should not mess with non-ref model definitions', () => {
             let modelInput = {
@@ -120,11 +120,11 @@ describe('ServerlessAWSDocumentation', function() {
                         }
                     }
                 }
-            };
+            }
 
             let modelOutput = objectUnderTest.createCfModel({
                 Ref: 'ApiGatewayRestApi',
-            })(modelInput);
+            })(modelInput)
             expect(modelOutput).toEqual({
                 Type: 'AWS::ApiGateway::Model',
                 Properties: {
@@ -142,8 +142,8 @@ describe('ServerlessAWSDocumentation', function() {
                         }
                     }
                 }
-            });
-        });
+            })
+        })
 
         it('should not crash with null values', () => {
             let modelInput = {
@@ -158,14 +158,14 @@ describe('ServerlessAWSDocumentation', function() {
                         }
                     }
                 }
-            };
+            }
 
             let modelExecution = function() {
                 objectUnderTest.createCfModel({
                     Ref: 'ApiGatewayRestApi',
-                })(modelInput);
+                })(modelInput)
             }
-            expect(modelExecution).not.toThrow();
-        });
-    });
+            expect(modelExecution).not.toThrow()
+        })
+    })
 })

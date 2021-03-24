@@ -235,7 +235,7 @@ class ServerlessAWSDocumentation {
     })
 
     // Add documentation parts for HTTP endpoints
-    this.updateCfTemplateWithEndpoints(restApiId);
+    this.updateCfTemplateWithEndpoints(restApiId)
 
     // Add models
     this.cfTemplate.Outputs.AwsDocApiId = {
