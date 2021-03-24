@@ -34,7 +34,7 @@ function extractModelDefinition(param, models) {
       name: param.name,
       description: param.description,
       contentType: 'application/json',
-      schema: param.schema
+      schema: param.schema,
     })
     return param.name
   }
@@ -46,5 +46,5 @@ module.exports = {
   },
   extractModel: function extractModel(param, models) {
     return extractModelDefinition(param, models)
-  }
+  },
 }

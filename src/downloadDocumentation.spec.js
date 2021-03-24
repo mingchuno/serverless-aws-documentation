@@ -4,7 +4,7 @@ describe('ServerlessAWSDocumentation', function () {
   beforeEach(() => {
     objectUnderTest = require('./downloadDocumentation.js')
     objectUnderTest.fs = {
-      writeFileSync: jasmine.createSpy('fs')
+      writeFileSync: jasmine.createSpy('fs'),
     }
     objectUnderTest.serverless = {
       providers: {
@@ -12,19 +12,19 @@ describe('ServerlessAWSDocumentation', function () {
           naming: {
             getStackName: () => {
               return 'testStackName'
-            }
+            },
           },
           request: jasmine.createSpy('aws request'),
           getStage: () => 'testStage',
-          getRegion: () => 'testRegion'
-        }
+          getRegion: () => 'testRegion',
+        },
       },
       service: {
         provider: {
           stage: 'testStage',
           region: 'testRegion',
-        }
-      }
+        },
+      },
     }
   })
 
@@ -140,8 +140,8 @@ describe('ServerlessAWSDocumentation', function () {
           }, {
             OutputKey: 'some-key-2',
             OutputValue: 'some-value-2',
-          }]
-        }]
+          }],
+        }],
       }))
 
       return objectUnderTest._getRestApiId('testStackName').then(restApiId => {

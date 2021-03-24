@@ -12,7 +12,7 @@ describe('ServerlessAWSDocumentation', function () {
       let part = {
         type: 'API',
         isList: false,
-        locationProps: []
+        locationProps: [],
       }
       let def = {
         info: {
@@ -23,14 +23,14 @@ describe('ServerlessAWSDocumentation', function () {
           contact: {
             name: 'John Smith',
             url: 'http://www.example.com/me',
-            email: 'js@example.com'
+            email: 'js@example.com',
           },
           license: {
             name: 'Licensing',
-            url: 'http://www.example.com/licensing'
-          }
+            url: 'http://www.example.com/licensing',
+          },
         },
-        tags: ['tag1']
+        tags: ['tag1'],
       }
       let knownLocation = {}
       objectUnderTest._createDocumentationPart(part, def, knownLocation)
@@ -39,7 +39,7 @@ describe('ServerlessAWSDocumentation', function () {
       expect(result).toEqual([
         {
           location: {
-            type: 'API'
+            type: 'API',
           },
           properties: {
             info: {
@@ -50,17 +50,17 @@ describe('ServerlessAWSDocumentation', function () {
               contact: {
                 name: 'John Smith',
                 url: 'http://www.example.com/me',
-                email: 'js@example.com'
+                email: 'js@example.com',
               },
               license: {
                 name: 'Licensing',
-                url: 'http://www.example.com/licensing'
-              }
+                url: 'http://www.example.com/licensing',
+              },
             },
-            tags: ['tag1']
+            tags: ['tag1'],
           },
-          restApiId: 'testApiId'
-        }
+          restApiId: 'testApiId',
+        },
       ])
     })
 
@@ -69,16 +69,16 @@ describe('ServerlessAWSDocumentation', function () {
         type: 'METHOD',
         isList: false,
         locationProps: ['path', 'method'],
-        children: {}
+        children: {},
       }
       let def = {
         description: 'the desc',
         summary: 'the summary',
-        tags: ['tag1']
+        tags: ['tag1'],
       }
       let knownLocation = {
         path: '/some/path',
-        method: 'GET'
+        method: 'GET',
       }
       objectUnderTest._createDocumentationPart(part, def, knownLocation)
       let result = objectUnderTest.documentationParts
@@ -88,15 +88,15 @@ describe('ServerlessAWSDocumentation', function () {
           location: {
             type: 'METHOD',
             path: '/some/path',
-            method: 'GET'
+            method: 'GET',
           },
           properties: {
             description: 'the desc',
             summary: 'the summary',
-            tags: ['tag1']
+            tags: ['tag1'],
           },
-          restApiId: 'testApiId'
-        }
+          restApiId: 'testApiId',
+        },
       ])
     })
 
@@ -104,17 +104,17 @@ describe('ServerlessAWSDocumentation', function () {
       let part = {
         type: 'QUERY_PARAMETER',
         isList: true,
-        locationProps: ['path', 'method', 'name']
+        locationProps: ['path', 'method', 'name'],
       }
       let def = {
         description: 'the desc',
         summary: 'the summary',
-        tags: ['tag1'] // should be ignored
+        tags: ['tag1'], // should be ignored
       }
       let knownLocation = {
         path: '/some/path',
         method: 'GET',
-        name: 'someParam'
+        name: 'someParam',
       }
       objectUnderTest._createDocumentationPart(part, def, knownLocation)
       let result = objectUnderTest.documentationParts
@@ -125,14 +125,14 @@ describe('ServerlessAWSDocumentation', function () {
             type: 'QUERY_PARAMETER',
             path: '/some/path',
             method: 'GET',
-            name: 'someParam'
+            name: 'someParam',
           },
           properties: {
             description: 'the desc',
-            summary: 'the summary'
+            summary: 'the summary',
           },
-          restApiId: 'testApiId'
-        }
+          restApiId: 'testApiId',
+        },
       ])
     })
   })
@@ -142,7 +142,7 @@ describe('ServerlessAWSDocumentation', function () {
       let def = {
         description: 'the desc',
         summary: 'the summary',
-        tags: ['tag1']
+        tags: ['tag1'],
       }
       let propertiesToGet = ['description', 'summary', 'tags']
       let result = objectUnderTest._getDocumentationProperties(def, propertiesToGet)
@@ -156,7 +156,7 @@ describe('ServerlessAWSDocumentation', function () {
       let def = {
         description: 'the desc',
         summary: 'the summary',
-        tags: ['tag1']
+        tags: ['tag1'],
       }
       let propertiesToGet = ['description', 'summary'] // no 'tags'
       let result = objectUnderTest._getDocumentationProperties(def, propertiesToGet)

@@ -254,7 +254,7 @@ module.exports = function() {
             },
             Properties: JSON.stringify(docPart.properties),
             RestApiId: docPart.restApiId,
-          }
+          },
         }
         return docParts
       }, {})
@@ -309,6 +309,6 @@ module.exports = function() {
       }
     },
 
-    _getDocumentationProperties: getDocumentationProperties
+    _getDocumentationProperties: getDocumentationProperties,
   }
 }

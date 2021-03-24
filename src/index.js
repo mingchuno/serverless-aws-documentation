@@ -29,7 +29,7 @@ class ServerlessAWSDocumentation {
     this.hooks = {
       'before:package:finalize': this._beforeDeploy,
       'after:deploy:deploy': this._afterDeploy,
-      'downloadDocumentation:downloadDocumentation': this._download
+      'downloadDocumentation:downloadDocumentation': this._download,
     }
 
     this.documentationParts = []
@@ -40,13 +40,13 @@ class ServerlessAWSDocumentation {
         lifecycleEvents: [ 'downloadDocumentation' ],
         options: {
           outputFileName: {
-            required: true
+            required: true,
           },
           extensions: {
-            required: false
-          }
-        }
-      }
+            required: false,
+          },
+        },
+      },
     }
 
     //validation rules for 'documentation' property on 'http' event from 'aws' provider
@@ -55,11 +55,11 @@ class ServerlessAWSDocumentation {
       definitions: {
         models: {
           type: 'object',
-          patternProperties: { '*/*': { type: 'string' } }
+          patternProperties: { '*/*': { type: 'string' } },
         },
         body: {
           type: 'object',
-          properties: { description: { type: 'string' } }
+          properties: { description: { type: 'string' } },
         },
         arrayOfProps: {
           type: 'array',
@@ -67,10 +67,10 @@ class ServerlessAWSDocumentation {
             {
               type: 'object',
               properties: { name: { type: 'string' }, description: { type: 'string' } },
-              required: [ 'name' ]
-            }
-          ]
-        }
+              required: [ 'name' ],
+            },
+          ],
+        },
       },
       properties: {
         documentation: {
@@ -94,15 +94,15 @@ class ServerlessAWSDocumentation {
                     statusCode: { type: 'number' },
                     responseBody: { '\'$ref\'': '#/definitions/body' },
                     responseHeaders: { '\'$ref\'': '#/definitions/arrayOfProps' },
-                    responseModels: { '\'$ref\'': '#/definitions/models' }
+                    responseModels: { '\'$ref\'': '#/definitions/models' },
                   },
-                  required: [ 'statusCode' ]
-                }
-              ]
-            }
-          }
-        }
-      }
+                  required: [ 'statusCode' ],
+                },
+              ],
+            },
+          },
+        },
+      },
     }
 
     //create schema for 'documentation' property
@@ -124,7 +124,7 @@ class ServerlessAWSDocumentation {
             name: definitionName,
             description: swaggerDefs[definitionName].description,
             contentType: 'application/json',
-            schema: swaggerDefs[definitionName]
+            schema: swaggerDefs[definitionName],
           }
         })
         this.customVars.documentation.models = swaggerModels
@@ -146,7 +146,7 @@ class ServerlessAWSDocumentation {
                   requestHeaders: [],
                   pathParams: [],
                   queryParams: [],
-                  requestModels: {}
+                  requestModels: {},
                 }
                 if (method.parameters) {
                   method.parameters.forEach(param => {
@@ -154,19 +154,19 @@ class ServerlessAWSDocumentation {
                       methodDoc['requestHeaders'].push({
                         name: param.name,
                         description: param.description,
-                        required: param.required
+                        required: param.required,
                       })
                     } else if (param.in === 'path') {
                       methodDoc['pathParams'].push({
                         name: param.name,
                         description: param.description,
-                        required: param.required
+                        required: param.required,
                       })
                     } else if (param.in === 'query') {
                       methodDoc['queryParams'].push({
                         name: param.name,
                         description: param.description,
-                        required: param.required
+                        required: param.required,
                       })
                     } else if (param.in === 'body') {
                       methodDoc['requestModels']['application/json'] = this.extractModel(
@@ -182,7 +182,7 @@ class ServerlessAWSDocumentation {
                   Object.keys(method.responses).map(statusCode => {
                     const response = method.responses[statusCode]
                     const methodResponse = {
-                      statusCode: '' + statusCode
+                      statusCode: '' + statusCode,
                     }
 
                     if (response.schema) {
@@ -209,7 +209,7 @@ class ServerlessAWSDocumentation {
 
     // The default rest API reference
     let restApiId = {
-      Ref: 'ApiGatewayRestApi'
+      Ref: 'ApiGatewayRestApi',
     }
 
     // Use the provider API gateway if one has been provided.
@@ -240,7 +240,7 @@ class ServerlessAWSDocumentation {
     // Add models
     this.cfTemplate.Outputs.AwsDocApiId = {
       Description: 'API ID',
-      Value: restApiId
+      Value: restApiId,
     }
   }
 

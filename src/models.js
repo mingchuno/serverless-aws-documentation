@@ -17,9 +17,9 @@ function replaceModelRefs(restApiId, cfModel) {
                                 'https://apigateway.amazonaws.com/restapis',
                                 restApiId,
                                 'models',
-                                match[1]
-                            ]
-                        ]
+                                match[1],
+                            ],
+                        ],
                     }
                     if (!cfModel.DependsOn) {
                         cfModel.DependsOn = new Set()
@@ -109,6 +109,6 @@ module.exports = {
       this.addModelDependencies(documentation.requestModels, resource)
       resource.Properties.RequestModels = documentation.requestModels
     }
-  }
+  },
 
 }

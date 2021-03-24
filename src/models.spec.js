@@ -10,10 +10,10 @@ describe('ServerlessAWSDocumentation', function() {
                     type: 'object',
                     properties: {
                         prop: {
-                            '$ref': '{{model: OtherModelName}}'
-                        }
-                    }
-                }
+                            '$ref': '{{model: OtherModelName}}',
+                        },
+                    },
+                },
             }
 
             let modelOutput = objectUnderTest.createCfModel({
@@ -37,20 +37,20 @@ describe('ServerlessAWSDocumentation', function() {
                                         [
                                             'https://apigateway.amazonaws.com/restapis',
                                             {
-                                                'Ref': 'ApiGatewayRestApi'
+                                                'Ref': 'ApiGatewayRestApi',
                                             },
                                             'models',
-                                            'OtherModelName'
-                                        ]
-                                    ]
-                                }
-                            }
-                        }
-                    }
+                                            'OtherModelName',
+                                        ],
+                                    ],
+                                },
+                            },
+                        },
+                    },
                 },
                 DependsOn: [
-                    'OtherModelNameModel'
-                ]
+                    'OtherModelNameModel',
+                ],
             })
         })
 
@@ -63,10 +63,10 @@ describe('ServerlessAWSDocumentation', function() {
                     type: 'object',
                     properties: {
                         prop: {
-                            '$ref': '{{model: OtherModelName}}'
-                        }
-                    }
-                }
+                            '$ref': '{{model: OtherModelName}}',
+                        },
+                    },
+                },
             }
 
             let modelOutput = objectUnderTest.createCfModel({
@@ -90,21 +90,21 @@ describe('ServerlessAWSDocumentation', function() {
                                         [
                                             'https://apigateway.amazonaws.com/restapis',
                                             {
-                                                'Fn::ImportValue': 'PublicApiGatewayRestApi'
+                                                'Fn::ImportValue': 'PublicApiGatewayRestApi',
                                             },
                                             'models',
-                                            'OtherModelName'
-                                        ]
-                                    ]
-                                }
-                            }
-                        }
+                                            'OtherModelName',
+                                        ],
+                                    ],
+                                },
+                            },
+                        },
                     },
                     Description: 'Test description',
                 },
                 DependsOn: [
-                    'OtherModelNameModel'
-                ]
+                    'OtherModelNameModel',
+                ],
             })
         })
 
@@ -116,10 +116,10 @@ describe('ServerlessAWSDocumentation', function() {
                     type: 'object',
                     properties: {
                         prop: {
-                            type: 'string'
-                        }
-                    }
-                }
+                            type: 'string',
+                        },
+                    },
+                },
             }
 
             let modelOutput = objectUnderTest.createCfModel({
@@ -137,11 +137,11 @@ describe('ServerlessAWSDocumentation', function() {
                         type: 'object',
                         properties: {
                             prop: {
-                                type: 'string'
-                            }
-                        }
-                    }
-                }
+                                type: 'string',
+                            },
+                        },
+                    },
+                },
             })
         })
 
@@ -154,10 +154,10 @@ describe('ServerlessAWSDocumentation', function() {
                     properties: {
                         prop: {
                             enum: ['test',  null],
-                            default: null
-                        }
-                    }
-                }
+                            default: null,
+                        },
+                    },
+                },
             }
 
             let modelExecution = function() {

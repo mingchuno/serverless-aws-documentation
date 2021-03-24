@@ -18,8 +18,8 @@ describe('ServerlessAWSDocumentation', function() {
         aws: {
           request: jasmine.createSpy('aws request'),
           naming: jasmine.createSpyObj([ 'getStackName', 'getMethodLogicalId', 'normalizePath' ]),
-          getCredentials: jasmine.createSpy('aws get credentials')
-        }
+          getCredentials: jasmine.createSpy('aws get credentials'),
+        },
       },
       service: {
         _functions: {},
@@ -28,18 +28,18 @@ describe('ServerlessAWSDocumentation', function() {
           compiledCloudFormationTemplate: {
             Resources: {
               ExistingResource: {
-                with: 'configuration'
-              }
+                with: 'configuration',
+              },
             },
-            Outputs: {}
-          }
+            Outputs: {},
+          },
         },
         getFunction: jasmine.createSpy('getFunction').and.callFake(functionName => {
           return this.serverlessMock.service._functions[functionName]
         }),
         getAllFunctions: jasmine.createSpy('getAllFunctions').and.callFake(() => {
           return this.serverlessMock.service._functionNames
-        })
+        }),
       },
       variables: {
         service: {
@@ -51,22 +51,22 @@ describe('ServerlessAWSDocumentation', function() {
                   name: 'TestModel',
                   contentType: 'application/json',
                   schema: 'some complex schema',
-                  description: 'the test model schema'
+                  description: 'the test model schema',
                 },
                 {
                   name: 'OtherModel',
                   contentType: 'application/json',
                   schema: 'some even more complex schema',
-                  description: 'the other test model schema'
-                }
-              ]
-            }
-          }
-        }
+                  description: 'the other test model schema',
+                },
+              ],
+            },
+          },
+        },
       },
       configSchemaHandler: {
-        defineFunctionEventProperties: jasmine.createSpy('define function event props')
-      }
+        defineFunctionEventProperties: jasmine.createSpy('define function event props'),
+      },
     }
 
     this.serverlessMock.providers.aws.naming.getMethodLogicalId.and.callFake((resourcename, method) => {
@@ -93,7 +93,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.plugin.hooks).toEqual({
         'before:package:finalize': this.plugin._beforeDeploy,
         'after:deploy:deploy': this.plugin._afterDeploy,
-        'downloadDocumentation:downloadDocumentation': this.plugin._download
+        'downloadDocumentation:downloadDocumentation': this.plugin._download,
       })
     })
 
@@ -117,17 +117,17 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
-          }
+            with: 'configuration',
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -136,7 +136,7 @@ describe('ServerlessAWSDocumentation', function() {
       this.serverlessMock.variables.service.custom.documentation.models.push({
         name: 'NoSchemaModel',
         contentType: 'application/json',
-        description: 'the other test model schema'
+        description: 'the other test model schema',
       })
 
       this.plugin.beforeDeploy()
@@ -146,50 +146,50 @@ describe('ServerlessAWSDocumentation', function() {
             Type: 'AWS::ApiGateway::Model',
             Properties: {
               RestApiId: {
-                Ref: 'ApiGatewayRestApi'
+                Ref: 'ApiGatewayRestApi',
               },
               ContentType: 'application/json',
               Name: 'TestModel',
               Schema: 'some complex schema',
-              Description: 'the test model schema'
-            }
+              Description: 'the test model schema',
+            },
           },
           OtherModelModel: {
             Type: 'AWS::ApiGateway::Model',
             Properties: {
               RestApiId: {
-                Ref: 'ApiGatewayRestApi'
+                Ref: 'ApiGatewayRestApi',
               },
               ContentType: 'application/json',
               Name: 'OtherModel',
               Schema: 'some even more complex schema',
-              Description: 'the other test model schema'
-            }
+              Description: 'the other test model schema',
+            },
           },
           NoSchemaModelModel: {
             Type: 'AWS::ApiGateway::Model',
             Properties: {
               RestApiId: {
-                Ref: 'ApiGatewayRestApi'
+                Ref: 'ApiGatewayRestApi',
               },
               ContentType: 'application/json',
               Name: 'NoSchemaModel',
               Schema: {},
-              Description: 'the other test model schema'
-            }
+              Description: 'the other test model schema',
+            },
           },
           ExistingResource: {
-            with: 'configuration'
-          }
+            with: 'configuration',
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -200,17 +200,17 @@ describe('ServerlessAWSDocumentation', function() {
         test: {
           events: [
             {
-              sns: {}
-            }
-          ]
+              sns: {},
+            },
+          ],
         },
         blub: {
           events: [
             {
-              schedule: {}
-            }
-          ]
-        }
+              schedule: {},
+            },
+          ],
+        },
       }
       this.plugin.beforeDeploy()
       expect(this.serverlessMock.service.getAllFunctions).toHaveBeenCalledTimes(1)
@@ -218,17 +218,17 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
-          }
+            with: 'configuration',
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -249,26 +249,26 @@ describe('ServerlessAWSDocumentation', function() {
                     {
                       statusCode: '200',
                       responseModels: {
-                        'application/json': 'CreateResponse'
-                      }
+                        'application/json': 'CreateResponse',
+                      },
                     },
                     {
                       statusCode: '400',
                       responseModels: {
-                        'application/json': 'ErrorResponse'
-                      }
+                        'application/json': 'ErrorResponse',
+                      },
                     },
                     {
                       statusCode: '404',
                       responseModels: {
-                        'application/json': 'ErrorResponse'
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                        'application/json': 'ErrorResponse',
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blub: {
           events: [
@@ -283,25 +283,25 @@ describe('ServerlessAWSDocumentation', function() {
                     {
                       statusCode: '204',
                       responseModels: {
-                        'application/json': 'CrazyResponse'
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
+                        'application/json': 'CrazyResponse',
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.someotherpath_get = {
         some: 'other_configuration',
-        Properties: {}
+        Properties: {},
       }
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -309,7 +309,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
@@ -319,23 +319,23 @@ describe('ServerlessAWSDocumentation', function() {
                 {
                   StatusCode: '200',
                   ResponseModels: {
-                    'application/json': 'CreateResponse'
-                  }
+                    'application/json': 'CreateResponse',
+                  },
                 },
                 {
                   StatusCode: '400',
                   ResponseModels: {
-                    'application/json': 'ErrorResponse'
-                  }
+                    'application/json': 'ErrorResponse',
+                  },
                 },
                 {
                   StatusCode: '404',
                   ResponseModels: {
-                    'application/json': 'ErrorResponse'
-                  }
-                }
-              ]
-            }
+                    'application/json': 'ErrorResponse',
+                  },
+                },
+              ],
+            },
           },
           someotherpath_get: {
             some: 'other_configuration',
@@ -345,21 +345,21 @@ describe('ServerlessAWSDocumentation', function() {
                 {
                   StatusCode: '204',
                   ResponseModels: {
-                    'application/json': 'CrazyResponse'
-                  }
-                }
-              ]
-            }
-          }
+                    'application/json': 'CrazyResponse',
+                  },
+                },
+              ],
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -380,26 +380,26 @@ describe('ServerlessAWSDocumentation', function() {
                     {
                       statusCode: 200,
                       responseModels: {
-                        'application/json': 'CreateResponse'
-                      }
+                        'application/json': 'CreateResponse',
+                      },
                     },
                     {
                       statusCode: 400,
                       responseModels: {
-                        'application/json': 'ErrorResponse'
-                      }
+                        'application/json': 'ErrorResponse',
+                      },
                     },
                     {
                       statusCode: 404,
                       responseModels: {
-                        'application/json': 'ErrorResponse'
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                        'application/json': 'ErrorResponse',
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blub: {
           events: [
@@ -414,25 +414,25 @@ describe('ServerlessAWSDocumentation', function() {
                     {
                       statusCode: 204,
                       responseModels: {
-                        'application/json': 'CrazyResponse'
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
+                        'application/json': 'CrazyResponse',
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.someotherpath_get = {
         some: 'other_configuration',
-        Properties: {}
+        Properties: {},
       }
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -440,7 +440,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
@@ -450,23 +450,23 @@ describe('ServerlessAWSDocumentation', function() {
                 {
                   StatusCode: '200',
                   ResponseModels: {
-                    'application/json': 'CreateResponse'
-                  }
+                    'application/json': 'CreateResponse',
+                  },
                 },
                 {
                   StatusCode: '400',
                   ResponseModels: {
-                    'application/json': 'ErrorResponse'
-                  }
+                    'application/json': 'ErrorResponse',
+                  },
                 },
                 {
                   StatusCode: '404',
                   ResponseModels: {
-                    'application/json': 'ErrorResponse'
-                  }
-                }
-              ]
-            }
+                    'application/json': 'ErrorResponse',
+                  },
+                },
+              ],
+            },
           },
           someotherpath_get: {
             some: 'other_configuration',
@@ -476,21 +476,21 @@ describe('ServerlessAWSDocumentation', function() {
                 {
                   StatusCode: '204',
                   ResponseModels: {
-                    'application/json': 'CrazyResponse'
-                  }
-                }
-              ]
-            }
-          }
+                    'application/json': 'CrazyResponse',
+                  },
+                },
+              ],
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -500,16 +500,16 @@ describe('ServerlessAWSDocumentation', function() {
           name: 'CreateResponseJson',
           contentType: 'application/json',
           schema: {
-            type: 'object'
-          }
+            type: 'object',
+          },
         },
         {
           name: 'CreateResponseXml',
           contentType: 'application/xml',
           schema: {
-            type: 'object'
-          }
-        }
+            type: 'object',
+          },
+        },
       ]
       this.serverlessMock.service._functionNames = [ 'test' ]
       this.serverlessMock.service._functions = {
@@ -527,27 +527,27 @@ describe('ServerlessAWSDocumentation', function() {
                       statusCode: 200,
                       responseModels: {
                         'application/json': 'CreateResponseJson',
-                        'application/xml': 'CreateResponseXml'
+                        'application/xml': 'CreateResponseXml',
                       },
                       responseHeaders: [
                         {
                           name: 'x-header',
-                          description: 'THE header'
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
+                          description: 'THE header',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -555,7 +555,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
@@ -566,50 +566,50 @@ describe('ServerlessAWSDocumentation', function() {
                   StatusCode: '200',
                   ResponseModels: {
                     'application/json': 'CreateResponseJson',
-                    'application/xml': 'CreateResponseXml'
+                    'application/xml': 'CreateResponseXml',
                   },
                   ResponseParameters: {
-                    'method.response.header.x-header': true
-                  }
-                }
-              ]
-            }
+                    'method.response.header.x-header': true,
+                  },
+                },
+              ],
+            },
           },
           CreateResponseJsonModel: {
             Type: 'AWS::ApiGateway::Model',
             Properties: {
               RestApiId: {
-                Ref: 'ApiGatewayRestApi'
+                Ref: 'ApiGatewayRestApi',
               },
               ContentType: 'application/json',
               Name: 'CreateResponseJson',
               Schema: {
-                type: 'object'
-              }
-            }
+                type: 'object',
+              },
+            },
           },
           CreateResponseXmlModel: {
             Type: 'AWS::ApiGateway::Model',
             Properties: {
               RestApiId: {
-                Ref: 'ApiGatewayRestApi'
+                Ref: 'ApiGatewayRestApi',
               },
               ContentType: 'application/xml',
               Name: 'CreateResponseXml',
               Schema: {
-                type: 'object'
-              }
-            }
-          }
+                type: 'object',
+              },
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -619,9 +619,9 @@ describe('ServerlessAWSDocumentation', function() {
           name: 'CreateResponseJson',
           contentType: 'application/json',
           schema: {
-            type: 'object'
-          }
-        }
+            type: 'object',
+          },
+        },
       ]
       this.serverlessMock.service._functionNames = [ 'test' ]
       this.serverlessMock.service._functions = {
@@ -638,32 +638,32 @@ describe('ServerlessAWSDocumentation', function() {
                     {
                       statusCode: 200,
                       responseModels: {
-                        'application/json': 'CreateResponseJson'
+                        'application/json': 'CreateResponseJson',
                       },
                       responseHeaders: [
                         {
                           name: 'x-header',
-                          description: 'THE header'
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
+                          description: 'THE header',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       }
       this.serverlessMock.service.provider.apiGateway = {
         restApiId: {
-          'Fn::ImportValue': 'PublicApiGatewayRestApi'
-        }
+          'Fn::ImportValue': 'PublicApiGatewayRestApi',
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -671,7 +671,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
@@ -681,37 +681,37 @@ describe('ServerlessAWSDocumentation', function() {
                 {
                   StatusCode: '200',
                   ResponseModels: {
-                    'application/json': 'CreateResponseJson'
+                    'application/json': 'CreateResponseJson',
                   },
                   ResponseParameters: {
-                    'method.response.header.x-header': true
-                  }
-                }
-              ]
-            }
+                    'method.response.header.x-header': true,
+                  },
+                },
+              ],
+            },
           },
           CreateResponseJsonModel: {
             Type: 'AWS::ApiGateway::Model',
             Properties: {
               RestApiId: {
-                'Fn::ImportValue': 'PublicApiGatewayRestApi'
+                'Fn::ImportValue': 'PublicApiGatewayRestApi',
               },
               ContentType: 'application/json',
               Name: 'CreateResponseJson',
               Schema: {
-                type: 'object'
-              }
-            }
-          }
+                type: 'object',
+              },
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              'Fn::ImportValue': 'PublicApiGatewayRestApi'
-            }
-          }
-        }
+              'Fn::ImportValue': 'PublicApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -732,21 +732,21 @@ describe('ServerlessAWSDocumentation', function() {
                     {
                       statusCode: '200',
                       responseModels: {
-                        'application/json': 'CreateResponse'
-                      }
+                        'application/json': 'CreateResponse',
+                      },
                     },
                     {
                       statusCode: '404',
                       responseModels: {
-                        'application/json': 'ErrorResponse'
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
+                        'application/json': 'ErrorResponse',
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
@@ -756,14 +756,14 @@ describe('ServerlessAWSDocumentation', function() {
           MethodResponses: [
             {
               StatusCode: '200',
-              id: 9001
+              id: 9001,
             },
             {
               StatusCode: '404',
-              id: 9002
-            }
-          ]
-        }
+              id: 9002,
+            },
+          ],
+        },
       }
 
       this.plugin.beforeDeploy()
@@ -771,7 +771,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
@@ -782,28 +782,28 @@ describe('ServerlessAWSDocumentation', function() {
                   StatusCode: '200',
                   id: 9001,
                   ResponseModels: {
-                    'application/json': 'CreateResponse'
-                  }
+                    'application/json': 'CreateResponse',
+                  },
                 },
                 {
                   StatusCode: '404',
                   id: 9002,
                   ResponseModels: {
-                    'application/json': 'ErrorResponse'
-                  }
-                }
-              ]
-            }
-          }
+                    'application/json': 'ErrorResponse',
+                  },
+                },
+              ],
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -825,22 +825,22 @@ describe('ServerlessAWSDocumentation', function() {
                       statusCode: '200',
                       should: 'not be included',
                       responseModels: {
-                        'application/json': 'CreateResponse'
-                      }
+                        'application/json': 'CreateResponse',
+                      },
                     },
                     {
                       statusCode: '404',
                       should: 'not be included',
                       responseModels: {
-                        'application/json': 'ErrorResponse'
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
+                        'application/json': 'ErrorResponse',
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
@@ -850,10 +850,10 @@ describe('ServerlessAWSDocumentation', function() {
           MethodResponses: [
             {
               StatusCode: '200',
-              id: 9001
-            }
-          ]
-        }
+              id: 9001,
+            },
+          ],
+        },
       }
 
       this.plugin.beforeDeploy()
@@ -861,7 +861,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
@@ -872,27 +872,27 @@ describe('ServerlessAWSDocumentation', function() {
                   StatusCode: '200',
                   id: 9001,
                   ResponseModels: {
-                    'application/json': 'CreateResponse'
-                  }
+                    'application/json': 'CreateResponse',
+                  },
                 },
                 {
                   StatusCode: '404',
                   ResponseModels: {
-                    'application/json': 'ErrorResponse'
-                  }
-                }
-              ]
-            }
-          }
+                    'application/json': 'ErrorResponse',
+                  },
+                },
+              ],
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -913,29 +913,29 @@ describe('ServerlessAWSDocumentation', function() {
                     {
                       statusCode: '200',
                       responseModels: {
-                        'application/json': 'CreateResponse'
-                      }
+                        'application/json': 'CreateResponse',
+                      },
                     },
                     {
                       statusCode: '404',
                       responseModels: {
-                        'application/json': 'ErrorResponse'
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
+                        'application/json': 'ErrorResponse',
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.somepath_post = {
         some: 'configuration',
         Properties: {
-          MethodResponses: []
-        }
+          MethodResponses: [],
+        },
       }
 
       this.plugin.beforeDeploy()
@@ -943,7 +943,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
@@ -953,27 +953,27 @@ describe('ServerlessAWSDocumentation', function() {
                 {
                   StatusCode: '200',
                   ResponseModels: {
-                    'application/json': 'CreateResponse'
-                  }
+                    'application/json': 'CreateResponse',
+                  },
                 },
                 {
                   StatusCode: '404',
                   ResponseModels: {
-                    'application/json': 'ErrorResponse'
-                  }
-                }
-              ]
-            }
-          }
+                    'application/json': 'ErrorResponse',
+                  },
+                },
+              ],
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -994,48 +994,48 @@ describe('ServerlessAWSDocumentation', function() {
                     {
                       statusCode: '200',
                       responseModels: {
-                        'application/json': 'CreateResponse'
+                        'application/json': 'CreateResponse',
                       },
                       responseHeaders: [
                         {
                           name: 'x-header',
-                          description: 'THE header'
+                          description: 'THE header',
                         },
                         {
                           name: 'x-other-header',
-                          description: 'THE other header'
-                        }
-                      ]
+                          description: 'THE other header',
+                        },
+                      ],
                     },
                     {
                       statusCode: '400',
                       responseModels: {
-                        'application/json': 'ErrorResponse'
+                        'application/json': 'ErrorResponse',
                       },
                       responseHeaders: [
                         {
                           name: 'x-header',
-                          description: 'THE header'
-                        }
-                      ]
+                          description: 'THE header',
+                        },
+                      ],
                     },
                     {
                       statusCode: '404',
                       responseModels: {
-                        'application/json': 'ErrorResponse'
+                        'application/json': 'ErrorResponse',
                       },
                       responseHeaders: [
                         {
                           name: 'x-header',
-                          description: 'THE header'
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                          description: 'THE header',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blub: {
           events: [
@@ -1050,35 +1050,35 @@ describe('ServerlessAWSDocumentation', function() {
                     {
                       statusCode: '204',
                       responseModels: {
-                        'application/json': 'CrazyResponse'
+                        'application/json': 'CrazyResponse',
                       },
                       responseHeaders: [
                         {
                           name: 'x-header',
-                          description: 'THE header'
+                          description: 'THE header',
                         },
                         {
                           name: 'x-other-header',
-                          description: 'THE other header'
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
+                          description: 'THE other header',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.someotherpath_get = {
         some: 'other_configuration',
-        Properties: {}
+        Properties: {},
       }
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -1086,7 +1086,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
@@ -1096,33 +1096,33 @@ describe('ServerlessAWSDocumentation', function() {
                 {
                   StatusCode: '200',
                   ResponseModels: {
-                    'application/json': 'CreateResponse'
+                    'application/json': 'CreateResponse',
                   },
                   ResponseParameters: {
                     'method.response.header.x-header': true,
-                    'method.response.header.x-other-header': true
-                  }
+                    'method.response.header.x-other-header': true,
+                  },
                 },
                 {
                   StatusCode: '400',
                   ResponseModels: {
-                    'application/json': 'ErrorResponse'
+                    'application/json': 'ErrorResponse',
                   },
                   ResponseParameters: {
-                    'method.response.header.x-header': true
-                  }
+                    'method.response.header.x-header': true,
+                  },
                 },
                 {
                   StatusCode: '404',
                   ResponseModels: {
-                    'application/json': 'ErrorResponse'
+                    'application/json': 'ErrorResponse',
                   },
                   ResponseParameters: {
-                    'method.response.header.x-header': true
-                  }
-                }
-              ]
-            }
+                    'method.response.header.x-header': true,
+                  },
+                },
+              ],
+            },
           },
           someotherpath_get: {
             some: 'other_configuration',
@@ -1132,25 +1132,25 @@ describe('ServerlessAWSDocumentation', function() {
                 {
                   StatusCode: '204',
                   ResponseModels: {
-                    'application/json': 'CrazyResponse'
+                    'application/json': 'CrazyResponse',
                   },
                   ResponseParameters: {
                     'method.response.header.x-header': true,
-                    'method.response.header.x-other-header': true
-                  }
-                }
-              ]
-            }
-          }
+                    'method.response.header.x-other-header': true,
+                  },
+                },
+              ],
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -1169,12 +1169,12 @@ describe('ServerlessAWSDocumentation', function() {
                 documentation: {
                   requestModels: {
                     'application/json': 'CreateRequest',
-                    'application/xml': 'CreateRequestXml'
-                  }
-                }
-              }
-            }
-          ]
+                    'application/xml': 'CreateRequestXml',
+                  },
+                },
+              },
+            },
+          ],
         },
         blub: {
           events: [
@@ -1186,23 +1186,23 @@ describe('ServerlessAWSDocumentation', function() {
                 private: true,
                 documentation: {
                   requestModels: {
-                    'application/json': 'GetRequest'
-                  }
-                }
-              }
-            }
-          ]
-        }
+                    'application/json': 'GetRequest',
+                  },
+                },
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.someotherpath_get = {
         some: 'other_configuration',
-        Properties: {}
+        Properties: {},
       }
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -1210,7 +1210,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
@@ -1218,28 +1218,28 @@ describe('ServerlessAWSDocumentation', function() {
             Properties: {
               RequestModels: {
                 'application/json': 'CreateRequest',
-                'application/xml': 'CreateRequestXml'
-              }
-            }
+                'application/xml': 'CreateRequestXml',
+              },
+            },
           },
           someotherpath_get: {
             some: 'other_configuration',
             DependsOn: [ 'GetRequestModel' ],
             Properties: {
               RequestModels: {
-                'application/json': 'GetRequest'
-              }
-            }
-          }
+                'application/json': 'GetRequest',
+              },
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -1256,11 +1256,11 @@ describe('ServerlessAWSDocumentation', function() {
                 cors: true,
                 private: true,
                 documentation: {
-                  requestModels: {}
-                }
-              }
-            }
-          ]
+                  requestModels: {},
+                },
+              },
+            },
+          ],
         },
         blub: {
           events: [
@@ -1270,21 +1270,21 @@ describe('ServerlessAWSDocumentation', function() {
                 method: 'get',
                 cors: true,
                 private: true,
-                documentation: {}
-              }
-            }
-          ]
-        }
+                documentation: {},
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.someotherpath_get = {
         some: 'other_configuration',
-        Properties: {}
+        Properties: {},
       }
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -1292,7 +1292,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
@@ -1301,7 +1301,7 @@ describe('ServerlessAWSDocumentation', function() {
               //   'application/json': 'CreateRequest',
               //   'application/xml': 'CreateRequestXml',
               // },
-            }
+            },
           },
           someotherpath_get: {
             some: 'other_configuration',
@@ -1309,17 +1309,17 @@ describe('ServerlessAWSDocumentation', function() {
               // RequestModels: {
               //   'application/json': 'GetRequest',
               // },
-            }
-          }
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -1338,26 +1338,26 @@ describe('ServerlessAWSDocumentation', function() {
                 documentation: {
                   requestModels: {
                     'application/json': 'CreateResponse',
-                    'application/xml': 'CreateRequestXml'
+                    'application/xml': 'CreateRequestXml',
                   },
                   methodResponses: [
                     {
                       statusCode: '200',
                       responseModels: {
-                        'application/json': 'CreateResponse'
-                      }
+                        'application/json': 'CreateResponse',
+                      },
                     },
                     {
                       statusCode: '400',
                       responseModels: {
-                        'application/json': 'ErrorResponse'
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                        'application/json': 'ErrorResponse',
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blub: {
           events: [
@@ -1372,25 +1372,25 @@ describe('ServerlessAWSDocumentation', function() {
                     {
                       statusCode: '204',
                       responseModels: {
-                        'application/json': 'CrazyResponse'
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
+                        'application/json': 'CrazyResponse',
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.someotherpath_get = {
         some: 'other_configuration',
-        Properties: {}
+        Properties: {},
       }
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -1398,7 +1398,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
@@ -1406,23 +1406,23 @@ describe('ServerlessAWSDocumentation', function() {
             Properties: {
               RequestModels: {
                 'application/json': 'CreateResponse',
-                'application/xml': 'CreateRequestXml'
+                'application/xml': 'CreateRequestXml',
               },
               MethodResponses: [
                 {
                   StatusCode: '200',
                   ResponseModels: {
-                    'application/json': 'CreateResponse'
-                  }
+                    'application/json': 'CreateResponse',
+                  },
                 },
                 {
                   StatusCode: '400',
                   ResponseModels: {
-                    'application/json': 'ErrorResponse'
-                  }
-                }
-              ]
-            }
+                    'application/json': 'ErrorResponse',
+                  },
+                },
+              ],
+            },
           },
           someotherpath_get: {
             some: 'other_configuration',
@@ -1432,21 +1432,21 @@ describe('ServerlessAWSDocumentation', function() {
                 {
                   StatusCode: '204',
                   ResponseModels: {
-                    'application/json': 'CrazyResponse'
-                  }
-                }
-              ]
-            }
-          }
+                    'application/json': 'CrazyResponse',
+                  },
+                },
+              ],
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -1461,10 +1461,10 @@ describe('ServerlessAWSDocumentation', function() {
                 path: 'some/path',
                 method: 'post',
                 cors: true,
-                private: true
-              }
-            }
-          ]
+                private: true,
+              },
+            },
+          ],
         },
         blub: {
           events: [
@@ -1473,21 +1473,21 @@ describe('ServerlessAWSDocumentation', function() {
                 path: 'some/other/path',
                 method: 'get',
                 cors: true,
-                private: true
-              }
-            }
-          ]
-        }
+                private: true,
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.someotherpath_get = {
         some: 'other_configuration',
-        Properties: {}
+        Properties: {},
       }
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -1495,25 +1495,25 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
-            Properties: {}
+            Properties: {},
           },
           someotherpath_get: {
             some: 'other_configuration',
-            Properties: {}
-          }
+            Properties: {},
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
     it('should not add request headers and query parameters in safe mode', function() {
@@ -1532,40 +1532,40 @@ describe('ServerlessAWSDocumentation', function() {
                   requestHeaders: [
                     {
                       name: 'x-my-header',
-                      description: 'x-my-header description'
-                    }
+                      description: 'x-my-header description',
+                    },
                   ],
                   queryParams: [
                     {
                       name: 'super-param',
-                      description: 'x-my-header description'
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                      description: 'x-my-header description',
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blub: {
           events: [
             {
               http: {
                 path: 'some/other/path',
-                method: 'get'
-              }
-            }
-          ]
-        }
+                method: 'get',
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.someotherpath_get = {
         some: 'other_configuration',
-        Properties: {}
+        Properties: {},
       }
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -1573,25 +1573,25 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
-            Properties: {}
+            Properties: {},
           },
           someotherpath_get: {
             some: 'other_configuration',
-            Properties: {}
-          }
+            Properties: {},
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -1609,40 +1609,40 @@ describe('ServerlessAWSDocumentation', function() {
                   queryParams: [
                     {
                       name: 'my-param',
-                      description: 'my-param description'
-                    }
+                      description: 'my-param description',
+                    },
                   ],
                   requestHeaders: [
                     {
                       name: 'x-my-header',
-                      description: 'x-my-header description'
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                      description: 'x-my-header description',
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blub: {
           events: [
             {
               http: {
                 path: 'some/other/path',
-                method: 'get'
-              }
-            }
-          ]
-        }
+                method: 'get',
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.someotherpath_get = {
         some: 'other_configuration',
-        Properties: {}
+        Properties: {},
       }
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -1650,30 +1650,30 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
             Properties: {
               RequestParameters: {
                 'method.request.header.x-my-header': false,
-                'method.request.querystring.my-param': false
-              }
-            }
+                'method.request.querystring.my-param': false,
+              },
+            },
           },
           someotherpath_get: {
             some: 'other_configuration',
-            Properties: {}
-          }
+            Properties: {},
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -1692,49 +1692,49 @@ describe('ServerlessAWSDocumentation', function() {
                     {
                       name: 'my-param',
                       description: 'my-param description',
-                      required: true
+                      required: true,
                     },
                     {
                       name: 'my-param2',
-                      description: 'my-param2 description'
-                    }
+                      description: 'my-param2 description',
+                    },
                   ],
                   requestHeaders: [
                     {
                       name: 'x-my-header',
                       description: 'x-my-header description',
-                      required: true
+                      required: true,
                     },
                     {
                       name: 'x-my-header2',
-                      description: 'x-my-header2 description'
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                      description: 'x-my-header2 description',
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blub: {
           events: [
             {
               http: {
                 path: 'some/other/path',
-                method: 'get'
-              }
-            }
-          ]
-        }
+                method: 'get',
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.someotherpath_get = {
         some: 'other_configuration',
-        Properties: {}
+        Properties: {},
       }
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -1742,7 +1742,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
@@ -1751,23 +1751,23 @@ describe('ServerlessAWSDocumentation', function() {
                 'method.request.header.x-my-header': true,
                 'method.request.header.x-my-header2': false,
                 'method.request.querystring.my-param': true,
-                'method.request.querystring.my-param2': false
-              }
-            }
+                'method.request.querystring.my-param2': false,
+              },
+            },
           },
           someotherpath_get: {
             some: 'other_configuration',
-            Properties: {}
-          }
+            Properties: {},
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
     it('should only add request headers and query parameters, not modify existing', function() {
@@ -1784,45 +1784,45 @@ describe('ServerlessAWSDocumentation', function() {
                   queryParams: [
                     {
                       name: 'my-param',
-                      description: 'my-param description'
-                    }
+                      description: 'my-param description',
+                    },
                   ],
                   requestHeaders: [
                     {
                       name: 'x-my-header',
-                      description: 'x-my-header description'
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                      description: 'x-my-header description',
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blub: {
           events: [
             {
               http: {
                 path: 'some/other/path',
-                method: 'get'
-              }
-            }
-          ]
-        }
+                method: 'get',
+              },
+            },
+          ],
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
       resources.someotherpath_get = {
         some: 'other_configuration',
-        Properties: {}
+        Properties: {},
       }
       resources.somepath_post = {
         some: 'configuration',
         Properties: {
           RequestParameters: {
             'method.request.header.x-my-header': true,
-            'method.request.querystring.my-param': true
-          }
-        }
+            'method.request.querystring.my-param': true,
+          },
+        },
       }
 
       this.plugin.beforeDeploy()
@@ -1830,30 +1830,30 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
             Properties: {
               RequestParameters: {
                 'method.request.header.x-my-header': true,
-                'method.request.querystring.my-param': true
-              }
-            }
+                'method.request.querystring.my-param': true,
+              },
+            },
           },
           someotherpath_get: {
             some: 'other_configuration',
-            Properties: {}
-          }
+            Properties: {},
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -1867,10 +1867,10 @@ describe('ServerlessAWSDocumentation', function() {
             type: 'object',
             properties: {
               number: { type: 'number' },
-              name: { type: 'string' }
-            }
-          }
-        }
+              name: { type: 'string' },
+            },
+          },
+        },
       }
 
       this.plugin.beforeDeploy()
@@ -1878,38 +1878,38 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           NoSchemaModel: {
             Properties: {
               ContentType: 'application/json',
               Name: 'NoSchema',
               RestApiId: {
-                Ref: 'ApiGatewayRestApi'
+                Ref: 'ApiGatewayRestApi',
               },
               Schema: {
                 properties: {
                   name: {
-                    type: 'string'
+                    type: 'string',
                   },
                   number: {
-                    type: 'number'
-                  }
+                    type: 'number',
+                  },
                 },
-                type: 'object'
-              }
+                type: 'object',
+              },
             },
-            Type: 'AWS::ApiGateway::Model'
-          }
+            Type: 'AWS::ApiGateway::Model',
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -1923,11 +1923,11 @@ describe('ServerlessAWSDocumentation', function() {
             {
               http: {
                 path: 'some/path',
-                method: 'post'
-              }
-            }
-          ]
-        }
+                method: 'post',
+              },
+            },
+          ],
+        },
       }
 
       this.plugin.customVars.documentation = {
@@ -1942,31 +1942,31 @@ describe('ServerlessAWSDocumentation', function() {
                   name: 'x-my-header',
                   in: 'header',
                   required: true,
-                  type: 'string'
+                  type: 'string',
                 },
                 {
                   name: 'my-param',
                   in: 'query',
                   required: false,
-                  type: 'string'
+                  type: 'string',
                 },
                 {
                   name: 'another-param',
                   in: 'path',
                   required: false,
-                  type: 'string'
-                }
-              ]
-            }
-          }
-        }
+                  type: 'string',
+                },
+              ],
+            },
+          },
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
 
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -1974,7 +1974,7 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           somepath_post: {
             some: 'configuration',
@@ -1982,19 +1982,19 @@ describe('ServerlessAWSDocumentation', function() {
               RequestParameters: {
                 'method.request.header.x-my-header': true,
                 'method.request.querystring.my-param': false,
-                'method.request.path.another-param': false
-              }
-            }
-          }
+                'method.request.path.another-param': false,
+              },
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -2008,11 +2008,11 @@ describe('ServerlessAWSDocumentation', function() {
             {
               http: {
                 path: 'some/path',
-                method: 'post'
-              }
-            }
-          ]
-        }
+                method: 'post',
+              },
+            },
+          ],
+        },
       }
 
       this.plugin.customVars.documentation = {
@@ -2027,42 +2027,42 @@ describe('ServerlessAWSDocumentation', function() {
                   name: 'x-my-header',
                   in: 'header',
                   required: true,
-                  type: 'string'
+                  type: 'string',
                 },
                 {
                   name: 'my-param',
                   in: 'query',
                   required: false,
-                  type: 'string'
+                  type: 'string',
                 },
                 {
                   in: 'body',
                   name: 'NoSchema',
                   required: true,
                   schema: {
-                    $ref: '#/definitions/NoSchema'
-                  }
-                }
-              ]
-            }
-          }
+                    $ref: '#/definitions/NoSchema',
+                  },
+                },
+              ],
+            },
+          },
         },
         definitions: {
           NoSchema: {
             type: 'object',
             properties: {
               number: { type: 'number' },
-              name: { type: 'string' }
-            }
-          }
-        }
+              name: { type: 'string' },
+            },
+          },
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
 
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -2070,28 +2070,28 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           NoSchemaModel: {
             Properties: {
               ContentType: 'application/json',
               Name: 'NoSchema',
               RestApiId: {
-                Ref: 'ApiGatewayRestApi'
+                Ref: 'ApiGatewayRestApi',
               },
               Schema: {
                 properties: {
                   name: {
-                    type: 'string'
+                    type: 'string',
                   },
                   number: {
-                    type: 'number'
-                  }
+                    type: 'number',
+                  },
                 },
-                type: 'object'
-              }
+                type: 'object',
+              },
             },
-            Type: 'AWS::ApiGateway::Model'
+            Type: 'AWS::ApiGateway::Model',
           },
           somepath_post: {
             some: 'configuration',
@@ -2099,22 +2099,22 @@ describe('ServerlessAWSDocumentation', function() {
             Properties: {
               RequestParameters: {
                 'method.request.header.x-my-header': true,
-                'method.request.querystring.my-param': false
+                'method.request.querystring.my-param': false,
               },
               RequestModels: {
-                'application/json': 'NoSchema'
-              }
-            }
-          }
+                'application/json': 'NoSchema',
+              },
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -2128,11 +2128,11 @@ describe('ServerlessAWSDocumentation', function() {
             {
               http: {
                 path: 'some/path',
-                method: 'post'
-              }
-            }
-          ]
-        }
+                method: 'post',
+              },
+            },
+          ],
+        },
       }
 
       this.plugin.customVars.documentation = {
@@ -2146,35 +2146,35 @@ describe('ServerlessAWSDocumentation', function() {
                 200: {
                   description: 'OK',
                   schema: {
-                    $ref: '#/definitions/NoSchema'
-                  }
+                    $ref: '#/definitions/NoSchema',
+                  },
                 },
                 400: {
-                  description: 'BR'
+                  description: 'BR',
                 },
                 500: {
-                  description: 'ERR'
-                }
-              }
-            }
-          }
+                  description: 'ERR',
+                },
+              },
+            },
+          },
         },
         definitions: {
           NoSchema: {
             type: 'object',
             properties: {
               number: { type: 'number' },
-              name: { type: 'string' }
-            }
-          }
-        }
+              name: { type: 'string' },
+            },
+          },
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
 
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -2182,28 +2182,28 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           NoSchemaModel: {
             Properties: {
               ContentType: 'application/json',
               Name: 'NoSchema',
               RestApiId: {
-                Ref: 'ApiGatewayRestApi'
+                Ref: 'ApiGatewayRestApi',
               },
               Schema: {
                 properties: {
                   name: {
-                    type: 'string'
+                    type: 'string',
                   },
                   number: {
-                    type: 'number'
-                  }
+                    type: 'number',
+                  },
                 },
-                type: 'object'
-              }
+                type: 'object',
+              },
             },
-            Type: 'AWS::ApiGateway::Model'
+            Type: 'AWS::ApiGateway::Model',
           },
           somepath_post: {
             some: 'configuration',
@@ -2212,26 +2212,26 @@ describe('ServerlessAWSDocumentation', function() {
               MethodResponses: [
                 {
                   StatusCode: '200',
-                  ResponseModels: { 'application/json': 'NoSchema' }
+                  ResponseModels: { 'application/json': 'NoSchema' },
                 },
                 {
-                  StatusCode: '400'
+                  StatusCode: '400',
                 },
                 {
-                  StatusCode: '500'
-                }
-              ]
-            }
-          }
+                  StatusCode: '500',
+                },
+              ],
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -2245,11 +2245,11 @@ describe('ServerlessAWSDocumentation', function() {
             {
               http: {
                 path: 'some/path',
-                method: 'post'
-              }
-            }
-          ]
-        }
+                method: 'post',
+              },
+            },
+          ],
+        },
       }
 
       this.plugin.customVars.documentation = {
@@ -2264,13 +2264,13 @@ describe('ServerlessAWSDocumentation', function() {
                   name: 'x-my-header',
                   in: 'header',
                   required: true,
-                  type: 'string'
+                  type: 'string',
                 },
                 {
                   name: 'my-param',
                   in: 'query',
                   required: false,
-                  type: 'string'
+                  type: 'string',
                 },
                 {
                   name: 'NoSchema',
@@ -2280,21 +2280,21 @@ describe('ServerlessAWSDocumentation', function() {
                     type: 'object',
                     properties: {
                       number: { type: 'number' },
-                      name: { type: 'string' }
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        }
+                      name: { type: 'string' },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
 
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -2302,28 +2302,28 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           NoSchemaModel: {
             Properties: {
               ContentType: 'application/json',
               Name: 'NoSchema',
               RestApiId: {
-                Ref: 'ApiGatewayRestApi'
+                Ref: 'ApiGatewayRestApi',
               },
               Schema: {
                 properties: {
                   name: {
-                    type: 'string'
+                    type: 'string',
                   },
                   number: {
-                    type: 'number'
-                  }
+                    type: 'number',
+                  },
                 },
-                type: 'object'
-              }
+                type: 'object',
+              },
             },
-            Type: 'AWS::ApiGateway::Model'
+            Type: 'AWS::ApiGateway::Model',
           },
           somepath_post: {
             some: 'configuration',
@@ -2331,22 +2331,22 @@ describe('ServerlessAWSDocumentation', function() {
             Properties: {
               RequestParameters: {
                 'method.request.header.x-my-header': true,
-                'method.request.querystring.my-param': false
+                'method.request.querystring.my-param': false,
               },
               RequestModels: {
-                'application/json': 'NoSchema'
-              }
-            }
-          }
+                'application/json': 'NoSchema',
+              },
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
 
@@ -2360,11 +2360,11 @@ describe('ServerlessAWSDocumentation', function() {
             {
               http: {
                 path: 'some/path',
-                method: 'post'
-              }
-            }
-          ]
-        }
+                method: 'post',
+              },
+            },
+          ],
+        },
       }
 
       this.plugin.customVars.documentation = {
@@ -2379,13 +2379,13 @@ describe('ServerlessAWSDocumentation', function() {
                   name: 'x-my-header',
                   in: 'header',
                   required: true,
-                  type: 'string'
+                  type: 'string',
                 },
                 {
                   name: 'my-param',
                   in: 'query',
                   required: false,
-                  type: 'string'
+                  type: 'string',
                 },
                 {
                   name: 'NoSchema',
@@ -2397,14 +2397,14 @@ describe('ServerlessAWSDocumentation', function() {
                       number: { type: 'number' },
                       name: { type: 'string' },
                       extra: {
-                        $ref: '#/definitions/Extra'
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-          }
+                        $ref: '#/definitions/Extra',
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
         },
         definitions: {
           Extra: {
@@ -2412,24 +2412,24 @@ describe('ServerlessAWSDocumentation', function() {
             properties: {
               number: { type: 'number' },
               sub: {
-                $ref: '#/definitions/Sub'
-              }
-            }
+                $ref: '#/definitions/Sub',
+              },
+            },
           },
           Sub: {
             type: 'object',
             properties: {
-              more: { type: 'string' }
-            }
-          }
-        }
+              more: { type: 'string' },
+            },
+          },
+        },
       }
 
       const resources = this.serverlessMock.service.provider.compiledCloudFormationTemplate.Resources
 
       resources.somepath_post = {
         some: 'configuration',
-        Properties: {}
+        Properties: {},
       }
 
       this.plugin.beforeDeploy()
@@ -2437,19 +2437,19 @@ describe('ServerlessAWSDocumentation', function() {
       expect(this.serverlessMock.service.provider.compiledCloudFormationTemplate).toEqual({
         Resources: {
           ExistingResource: {
-            with: 'configuration'
+            with: 'configuration',
           },
           ExtraModel: {
             Properties: {
               ContentType: 'application/json',
               Name: 'Extra',
               RestApiId: {
-                Ref: 'ApiGatewayRestApi'
+                Ref: 'ApiGatewayRestApi',
               },
               Schema: {
                 properties: {
                   number: {
-                    type: 'number'
+                    type: 'number',
                   },
                   sub: {
                     $ref: {
@@ -2458,51 +2458,51 @@ describe('ServerlessAWSDocumentation', function() {
                         [
                           'https://apigateway.amazonaws.com/restapis',
                           {
-                            Ref: 'ApiGatewayRestApi'
+                            Ref: 'ApiGatewayRestApi',
                           },
                           'models',
-                          'Sub'
-                        ]
-                      ]
-                    }
-                  }
+                          'Sub',
+                        ],
+                      ],
+                    },
+                  },
                 },
-                type: 'object'
-              }
+                type: 'object',
+              },
             },
             DependsOn: [ 'SubModel' ],
-            Type: 'AWS::ApiGateway::Model'
+            Type: 'AWS::ApiGateway::Model',
           },
           SubModel: {
             Properties: {
               ContentType: 'application/json',
               Name: 'Sub',
               RestApiId: {
-                Ref: 'ApiGatewayRestApi'
+                Ref: 'ApiGatewayRestApi',
               },
               Schema: {
                 properties: {
-                  more: { type: 'string' }
+                  more: { type: 'string' },
                 },
-                type: 'object'
-              }
+                type: 'object',
+              },
             },
-            Type: 'AWS::ApiGateway::Model'
+            Type: 'AWS::ApiGateway::Model',
           },
           NoSchemaModel: {
             Properties: {
               ContentType: 'application/json',
               Name: 'NoSchema',
               RestApiId: {
-                Ref: 'ApiGatewayRestApi'
+                Ref: 'ApiGatewayRestApi',
               },
               Schema: {
                 properties: {
                   name: {
-                    type: 'string'
+                    type: 'string',
                   },
                   number: {
-                    type: 'number'
+                    type: 'number',
                   },
                   extra: {
                     $ref: {
@@ -2511,20 +2511,20 @@ describe('ServerlessAWSDocumentation', function() {
                         [
                           'https://apigateway.amazonaws.com/restapis',
                           {
-                            Ref: 'ApiGatewayRestApi'
+                            Ref: 'ApiGatewayRestApi',
                           },
                           'models',
-                          'Extra'
-                        ]
-                      ]
-                    }
-                  }
+                          'Extra',
+                        ],
+                      ],
+                    },
+                  },
                 },
-                type: 'object'
-              }
+                type: 'object',
+              },
             },
             DependsOn: [ 'ExtraModel' ],
-            Type: 'AWS::ApiGateway::Model'
+            Type: 'AWS::ApiGateway::Model',
           },
           somepath_post: {
             some: 'configuration',
@@ -2532,22 +2532,22 @@ describe('ServerlessAWSDocumentation', function() {
             Properties: {
               RequestParameters: {
                 'method.request.header.x-my-header': true,
-                'method.request.querystring.my-param': false
+                'method.request.querystring.my-param': false,
               },
               RequestModels: {
-                'application/json': 'NoSchema'
-              }
-            }
-          }
+                'application/json': 'NoSchema',
+              },
+            },
+          },
         },
         Outputs: {
           AwsDocApiId: {
             Description: 'API ID',
             Value: {
-              Ref: 'ApiGatewayRestApi'
-            }
-          }
-        }
+              Ref: 'ApiGatewayRestApi',
+            },
+          },
+        },
       })
     })
   })
@@ -2577,27 +2577,27 @@ describe('ServerlessAWSDocumentation', function() {
     it('should build documentation with deploying and upload to api gateway', function(done) {
       this.serverlessMock.variables.service.custom.documentation.api = {
         description: 'this is an api',
-        tags: [ { name: 'tag1', description: 'First tag' }, { name: 'tag2', description: 'Second tag' } ]
+        tags: [ { name: 'tag1', description: 'First tag' }, { name: 'tag2', description: 'Second tag' } ],
       }
       this.serverlessMock.variables.service.custom.documentation.authorizers = [
         {
           name: 'an-authorizer',
-          description: 'this is an authorizer'
+          description: 'this is an authorizer',
         },
         {
           name: 'no-authorizer',
-          description: 'this is not an authorizer'
-        }
+          description: 'this is not an authorizer',
+        },
       ]
       this.serverlessMock.variables.service.custom.documentation.resources = [
         {
           path: 'super/path',
-          description: 'this is a super path'
+          description: 'this is a super path',
         },
         {
           path: 'hidden/path',
-          description: 'this is a super secret hidden path'
-        }
+          description: 'this is a super secret hidden path',
+        },
       ]
 
       this.serverlessMock.service._functionNames = [ 'test', 'blub', 'blib', 'blab' ]
@@ -2614,38 +2614,38 @@ describe('ServerlessAWSDocumentation', function() {
                   unknownProperty: 'should not be displayed',
                   tags: [ 'tag1', 'tag2' ],
                   requestBody: {
-                    description: 'is it me'
+                    description: 'is it me',
                   },
                   requestHeaders: [
                     {
                       name: 'x-you',
-                      description: 'are looking for'
+                      description: 'are looking for',
                     },
                     {
                       name: 'x-hello',
-                      description: 'again'
-                    }
+                      description: 'again',
+                    },
                   ],
                   methodResponses: [
                     {
                       statusCode: '200',
                       description: 'This is a good response',
                       responseModels: {
-                        'application/json': 'CreateResponse'
-                      }
+                        'application/json': 'CreateResponse',
+                      },
                     },
                     {
                       statusCode: '400',
-                      description: 'You failed'
+                      description: 'You failed',
                     },
                     {
-                      statusCode: '404'
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                      statusCode: '404',
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blub: {
           events: [
@@ -2657,66 +2657,66 @@ describe('ServerlessAWSDocumentation', function() {
                   queryParams: [
                     {
                       name: 'supername',
-                      description: 'this is your super name'
+                      description: 'this is your super name',
                     },
                     {
                       name: 'not-supername',
-                      description: 'this is not your super name'
-                    }
+                      description: 'this is not your super name',
+                    },
                   ],
                   pathParams: [
                     {
                       name: 'id',
-                      description: 'this is the id'
+                      description: 'this is the id',
                     },
                     {
                       name: 'super-id',
-                      description: 'this is the secret super id'
-                    }
+                      description: 'this is the secret super id',
+                    },
                   ],
                   methodResponses: [
                     {
                       statusCode: '204',
                       description: 'super response',
                       responseBody: {
-                        description: 'hiiiii'
+                        description: 'hiiiii',
                       },
                       responseHeaders: [
                         {
                           name: 'x-header',
-                          description: 'THE header'
+                          description: 'THE header',
                         },
                         {
                           name: 'x-other-header',
-                          description: 'THE other header'
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                          description: 'THE other header',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blab: {
           events: [
             {
               http: {
                 path: 'some/other/path',
-                method: 'get'
-              }
-            }
-          ]
+                method: 'get',
+              },
+            },
+          ],
         },
         blib: {
           events: [
             {
               sns: {
-                documentation: {}
-              }
-            }
-          ]
-        }
+                documentation: {},
+              },
+            },
+          ],
+        },
       }
 
       this.optionsMock.stage = 'megastage'
@@ -2731,26 +2731,26 @@ describe('ServerlessAWSDocumentation', function() {
                   Outputs: [
                     {
                       OutputKey: 'ApiKey',
-                      OutputValue: 'nothing'
+                      OutputValue: 'nothing',
                     },
                     {
                       OutputKey: 'AwsDocApiId',
-                      OutputValue: 'superid'
-                    }
-                  ]
-                }
-              ]
+                      OutputValue: 'superid',
+                    },
+                  ],
+                },
+              ],
             })
           case 'getDocumentationParts':
             return Promise.resolve({
               items: [
                 {
-                  id: '123'
+                  id: '123',
                 },
                 {
-                  id: '456'
-                }
-              ]
+                  id: '456',
+                },
+              ],
             })
           case 'getDocumentationVersion':
             return Promise.reject(new Error('Invalid Documentation version specified'))
@@ -2766,7 +2766,7 @@ describe('ServerlessAWSDocumentation', function() {
           this.serverlessMock.providers.aws.request
         ).toHaveBeenCalledWith('APIGateway', 'getDocumentationParts', {
           restApiId: 'superid',
-          limit: 9999
+          limit: 9999,
         })
 
         // Delete documentation parts
@@ -2774,13 +2774,13 @@ describe('ServerlessAWSDocumentation', function() {
           this.serverlessMock.providers.aws.request
         ).toHaveBeenCalledWith('APIGateway', 'deleteDocumentationPart', {
           documentationPartId: '123',
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
         expect(
           this.serverlessMock.providers.aws.request
         ).toHaveBeenCalledWith('APIGateway', 'deleteDocumentationPart', {
           documentationPartId: '456',
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         // Create documentation parts
@@ -2792,10 +2792,10 @@ describe('ServerlessAWSDocumentation', function() {
             description: 'this is an api',
             tags: [
               { name: 'tag1', description: 'First tag' },
-              { name: 'tag2', description: 'Second tag' }
-            ]
+              { name: 'tag2', description: 'Second tag' },
+            ],
           }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2803,7 +2803,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { type: 'AUTHORIZER', name: 'an-authorizer' },
           properties: JSON.stringify({ description: 'this is an authorizer' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2811,7 +2811,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { type: 'AUTHORIZER', name: 'no-authorizer' },
           properties: JSON.stringify({ description: 'this is not an authorizer' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2819,7 +2819,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { type: 'RESOURCE', path: 'super/path' },
           properties: JSON.stringify({ description: 'this is a super path' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2827,7 +2827,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { type: 'RESOURCE', path: 'hidden/path' },
           properties: JSON.stringify({ description: 'this is a super secret hidden path' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2835,7 +2835,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { name: 'TestModel', type: 'MODEL' },
           properties: JSON.stringify({ description: 'the test model schema' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2843,7 +2843,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { name: 'OtherModel', type: 'MODEL' },
           properties: JSON.stringify({ description: 'the other test model schema' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2853,9 +2853,9 @@ describe('ServerlessAWSDocumentation', function() {
           properties: JSON.stringify({
             description: 'hello hello',
             summary: 'hello',
-            tags: [ 'tag1', 'tag2' ]
+            tags: [ 'tag1', 'tag2' ],
           }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2863,7 +2863,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { path: 'some/path', method: 'POST', type: 'REQUEST_BODY' },
           properties: JSON.stringify({ description: 'is it me' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2871,7 +2871,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { path: 'some/path', method: 'POST', type: 'REQUEST_HEADER', name: 'x-you' },
           properties: JSON.stringify({ description: 'are looking for' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2879,7 +2879,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { path: 'some/path', method: 'POST', type: 'REQUEST_HEADER', name: 'x-hello' },
           properties: JSON.stringify({ description: 'again' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2887,7 +2887,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { path: 'some/path', method: 'POST', statusCode: '200', type: 'RESPONSE' },
           properties: JSON.stringify({ description: 'This is a good response' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2895,7 +2895,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { path: 'some/path', method: 'POST', statusCode: '400', type: 'RESPONSE' },
           properties: JSON.stringify({ description: 'You failed' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2903,7 +2903,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { path: 'some/other/path', method: 'GET', statusCode: '204', type: 'RESPONSE' },
           properties: JSON.stringify({ description: 'super response' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2911,7 +2911,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { path: 'some/other/path', method: 'GET', statusCode: '204', type: 'RESPONSE_BODY' },
           properties: JSON.stringify({ description: 'hiiiii' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2922,10 +2922,10 @@ describe('ServerlessAWSDocumentation', function() {
             method: 'GET',
             statusCode: '204',
             type: 'RESPONSE_HEADER',
-            name: 'x-header'
+            name: 'x-header',
           },
           properties: JSON.stringify({ description: 'THE header' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2936,10 +2936,10 @@ describe('ServerlessAWSDocumentation', function() {
             method: 'GET',
             statusCode: '204',
             type: 'RESPONSE_HEADER',
-            name: 'x-other-header'
+            name: 'x-other-header',
           },
           properties: JSON.stringify({ description: 'THE other header' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2947,7 +2947,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { path: 'some/other/path', method: 'GET', type: 'QUERY_PARAMETER', name: 'supername' },
           properties: JSON.stringify({ description: 'this is your super name' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2957,10 +2957,10 @@ describe('ServerlessAWSDocumentation', function() {
             path: 'some/other/path',
             method: 'GET',
             type: 'QUERY_PARAMETER',
-            name: 'not-supername'
+            name: 'not-supername',
           },
           properties: JSON.stringify({ description: 'this is not your super name' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2968,7 +2968,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { path: 'some/other/path', method: 'GET', type: 'PATH_PARAMETER', name: 'id' },
           properties: JSON.stringify({ description: 'this is the id' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -2976,7 +2976,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { path: 'some/other/path', method: 'GET', type: 'PATH_PARAMETER', name: 'super-id' },
           properties: JSON.stringify({ description: 'this is the secret super id' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
         done()
       })
@@ -2984,17 +2984,17 @@ describe('ServerlessAWSDocumentation', function() {
 
     it('should build documentation for all http event under a function', function(done) {
       this.serverlessMock.variables.service.custom.documentation.api = {
-        description: 'this is an api'
+        description: 'this is an api',
       }
       this.serverlessMock.variables.service.custom.documentation.resources = [
         {
           path: 'super/path',
-          description: 'this is a super path'
+          description: 'this is a super path',
         },
         {
           path: 'hidden/path',
-          description: 'this is a super secret hidden path'
-        }
+          description: 'this is a super secret hidden path',
+        },
       ]
 
       this.serverlessMock.service._functionNames = [ 'test' ]
@@ -3007,9 +3007,9 @@ describe('ServerlessAWSDocumentation', function() {
                 method: 'post',
                 documentation: {
                   summary: 'hello',
-                  description: 'hello hello'
-                }
-              }
+                  description: 'hello hello',
+                },
+              },
             },
             {
               http: {
@@ -3017,12 +3017,12 @@ describe('ServerlessAWSDocumentation', function() {
                 method: 'get',
                 documentation: {
                   summary: 'blah',
-                  description: 'blah blah'
-                }
-              }
-            }
-          ]
-        }
+                  description: 'blah blah',
+                },
+              },
+            },
+          ],
+        },
       }
 
       this.optionsMock.stage = 'megastage'
@@ -3037,15 +3037,15 @@ describe('ServerlessAWSDocumentation', function() {
                   Outputs: [
                     {
                       OutputKey: 'ApiKey',
-                      OutputValue: 'nothing'
+                      OutputValue: 'nothing',
                     },
                     {
                       OutputKey: 'AwsDocApiId',
-                      OutputValue: 'superid'
-                    }
-                  ]
-                }
-              ]
+                      OutputValue: 'superid',
+                    },
+                  ],
+                },
+              ],
             })
           case 'getDocumentationParts':
             return Promise.resolve({ items: [] })
@@ -3063,7 +3063,7 @@ describe('ServerlessAWSDocumentation', function() {
           this.serverlessMock.providers.aws.request
         ).toHaveBeenCalledWith('APIGateway', 'getDocumentationParts', {
           restApiId: 'superid',
-          limit: 9999
+          limit: 9999,
         })
 
         // Create documentation parts
@@ -3072,7 +3072,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { type: 'API' },
           properties: JSON.stringify({ description: 'this is an api' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -3080,7 +3080,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { type: 'RESOURCE', path: 'super/path' },
           properties: JSON.stringify({ description: 'this is a super path' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -3088,7 +3088,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { type: 'RESOURCE', path: 'hidden/path' },
           properties: JSON.stringify({ description: 'this is a super secret hidden path' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -3096,7 +3096,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { path: 'some/path', method: 'POST', type: 'METHOD' },
           properties: JSON.stringify({ description: 'hello hello', summary: 'hello' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
 
         expect(
@@ -3104,7 +3104,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationPart', {
           location: { path: 'some/other/path', method: 'GET', type: 'METHOD' },
           properties: JSON.stringify({ description: 'blah blah', summary: 'blah' }),
-          restApiId: 'superid'
+          restApiId: 'superid',
         })
         done()
       })
@@ -3124,11 +3124,11 @@ describe('ServerlessAWSDocumentation', function() {
                   Outputs: [
                     {
                       OutputKey: 'ApiId',
-                      OutputValue: 'superid'
-                    }
-                  ]
-                }
-              ]
+                      OutputValue: 'superid',
+                    },
+                  ],
+                },
+              ],
             })
           case 'getDocumentationVersion':
             () => Promise.resolve()
@@ -3174,11 +3174,11 @@ describe('ServerlessAWSDocumentation', function() {
                   Outputs: [
                     {
                       OutputKey: 'ApiId',
-                      OutputValue: 'superid'
-                    }
-                  ]
-                }
-              ]
+                      OutputValue: 'superid',
+                    },
+                  ],
+                },
+              ],
             })
           case 'getDocumentationVersion':
             return Promise.reject(new Error('other error'))
@@ -3212,27 +3212,27 @@ describe('ServerlessAWSDocumentation', function() {
       spyOn(console, 'info')
 
       this.serverlessMock.variables.service.custom.documentation.api = {
-        description: 'this is an api'
+        description: 'this is an api',
       }
       this.serverlessMock.variables.service.custom.documentation.authorizers = [
         {
           name: 'an-authorizer',
-          description: 'this is an authorizer'
+          description: 'this is an authorizer',
         },
         {
           name: 'no-authorizer',
-          description: 'this is not an authorizer'
-        }
+          description: 'this is not an authorizer',
+        },
       ]
       this.serverlessMock.variables.service.custom.documentation.resources = [
         {
           path: 'super/path',
-          description: 'this is a super path'
+          description: 'this is a super path',
         },
         {
           path: 'hidden/path',
-          description: 'this is a super secret hidden path'
-        }
+          description: 'this is a super secret hidden path',
+        },
       ]
 
       this.serverlessMock.service._functionNames = [ 'test', 'blub', 'blib', 'blab' ]
@@ -3248,38 +3248,38 @@ describe('ServerlessAWSDocumentation', function() {
                   description: 'hello hello',
                   unknownProperty: 'should not be displayed',
                   requestBody: {
-                    description: 'is it me'
+                    description: 'is it me',
                   },
                   requestHeaders: [
                     {
                       name: 'x-you',
-                      description: 'are looking for'
+                      description: 'are looking for',
                     },
                     {
                       name: 'x-hello',
-                      description: 'again'
-                    }
+                      description: 'again',
+                    },
                   ],
                   methodResponses: [
                     {
                       statusCode: '200',
                       description: 'This is a good response',
                       responseModels: {
-                        'application/json': 'CreateResponse'
-                      }
+                        'application/json': 'CreateResponse',
+                      },
                     },
                     {
                       statusCode: '400',
-                      description: 'You failed'
+                      description: 'You failed',
                     },
                     {
-                      statusCode: '404'
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                      statusCode: '404',
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blub: {
           events: [
@@ -3291,66 +3291,66 @@ describe('ServerlessAWSDocumentation', function() {
                   queryParams: [
                     {
                       name: 'supername',
-                      description: 'this is your super name'
+                      description: 'this is your super name',
                     },
                     {
                       name: 'not-supername',
-                      description: 'this is not your super name'
-                    }
+                      description: 'this is not your super name',
+                    },
                   ],
                   pathParams: [
                     {
                       name: 'id',
-                      description: 'this is the id'
+                      description: 'this is the id',
                     },
                     {
                       name: 'super-id',
-                      description: 'this is the secret super id'
-                    }
+                      description: 'this is the secret super id',
+                    },
                   ],
                   methodResponses: [
                     {
                       statusCode: '204',
                       description: 'super response',
                       responseBody: {
-                        description: 'hiiiii'
+                        description: 'hiiiii',
                       },
                       responseHeaders: [
                         {
                           name: 'x-header',
-                          description: 'THE header'
+                          description: 'THE header',
                         },
                         {
                           name: 'x-other-header',
-                          description: 'THE other header'
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                          description: 'THE other header',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blab: {
           events: [
             {
               http: {
                 path: 'some/other/path',
-                method: 'get'
-              }
-            }
-          ]
+                method: 'get',
+              },
+            },
+          ],
         },
         blib: {
           events: [
             {
               sns: {
-                documentation: {}
-              }
-            }
-          ]
-        }
+                documentation: {},
+              },
+            },
+          ],
+        },
       }
 
       spyOn(this.plugin, 'generateAutoDocumentationVersion').and.callThrough()
@@ -3370,26 +3370,26 @@ describe('ServerlessAWSDocumentation', function() {
                   Outputs: [
                     {
                       OutputKey: 'ApiKey',
-                      OutputValue: 'nothing'
+                      OutputValue: 'nothing',
                     },
                     {
                       OutputKey: 'AwsDocApiId',
-                      OutputValue: 'superid'
-                    }
-                  ]
-                }
-              ]
+                      OutputValue: 'superid',
+                    },
+                  ],
+                },
+              ],
             })
           case 'getDocumentationParts':
             return Promise.resolve({
               items: [
                 {
-                  id: '123'
+                  id: '123',
                 },
                 {
-                  id: '456'
-                }
-              ]
+                  id: '456',
+                },
+              ],
             })
           case 'getDocumentationVersion':
             return Promise.reject(new Error('Invalid Documentation version specified'))
@@ -3413,7 +3413,7 @@ describe('ServerlessAWSDocumentation', function() {
           this.serverlessMock.providers.aws.request
         ).toHaveBeenCalledWith('APIGateway', 'getDocumentationVersion', {
           restApiId: 'superid',
-          documentationVersion: jasmine.any(String)
+          documentationVersion: jasmine.any(String),
         })
 
         const getDocVersion = this.serverlessMock.providers.aws.request.calls.argsFor(1)[2]
@@ -3423,7 +3423,7 @@ describe('ServerlessAWSDocumentation', function() {
         ).toHaveBeenCalledWith('APIGateway', 'createDocumentationVersion', {
           restApiId: 'superid',
           documentationVersion: getDocVersion,
-          stageName: 'megastage'
+          stageName: 'megastage',
         })
 
         expect(this.plugin.generateAutoDocumentationVersion).toHaveBeenCalledTimes(1)
@@ -3442,11 +3442,11 @@ describe('ServerlessAWSDocumentation', function() {
               Outputs: [
                 {
                   OutputKey: 'ApiId',
-                  OutputValue: 'superid'
-                }
-              ]
-            }
-          ]
+                  OutputValue: 'superid',
+                },
+              ],
+            },
+          ],
         })
       )
       this.serverlessMock.providers.aws.naming.getStackName.and.returnValue('superstack')
@@ -3462,7 +3462,7 @@ describe('ServerlessAWSDocumentation', function() {
     it('should not do anything if a list documentation part is not an array', function(done) {
       spyOn(console, 'info')
       this.serverlessMock.variables.service.custom.documentation.models = {
-        this: 'is wrong'
+        this: 'is wrong',
       }
       this.serverlessMock.providers.aws.request.and.returnValue(
         Promise.resolve({
@@ -3471,11 +3471,11 @@ describe('ServerlessAWSDocumentation', function() {
               Outputs: [
                 {
                   OutputKey: 'ApiId',
-                  OutputValue: 'superid'
-                }
-              ]
-            }
-          ]
+                  OutputValue: 'superid',
+                },
+              ],
+            },
+          ],
         })
       )
       this.serverlessMock.providers.aws.naming.getStackName.and.returnValue('superstack')
@@ -3496,19 +3496,19 @@ describe('ServerlessAWSDocumentation', function() {
                   Outputs: [
                     {
                       OutputKey: 'ApiId',
-                      OutputValue: 'superid'
-                    }
-                  ]
-                }
-              ]
+                      OutputValue: 'superid',
+                    },
+                  ],
+                },
+              ],
             })
           case 'getDocumentationParts':
             return Promise.resolve({
-              items: []
+              items: [],
             })
           case 'getDocumentationVersion':
             return Promise.reject({
-              message: 'Invalid Documentation version specified'
+              message: 'Invalid Documentation version specified',
             })
           case 'deleteDocumentationPart':
             return Promise.reject()
@@ -3540,27 +3540,27 @@ describe('ServerlessAWSDocumentation', function() {
 
     it('should generate different documentation versions for different documentation content', function() {
       this.serverlessMock.variables.service.custom.documentation.api = {
-        description: 'this is an api'
+        description: 'this is an api',
       }
       this.serverlessMock.variables.service.custom.documentation.authorizers = [
         {
           name: 'an-authorizer',
-          description: 'this is an authorizer'
+          description: 'this is an authorizer',
         },
         {
           name: 'no-authorizer',
-          description: 'this is not an authorizer'
-        }
+          description: 'this is not an authorizer',
+        },
       ]
       this.serverlessMock.variables.service.custom.documentation.resources = [
         {
           path: 'super/path',
-          description: 'this is a super path'
+          description: 'this is a super path',
         },
         {
           path: 'hidden/path',
-          description: 'this is a super secret hidden path'
-        }
+          description: 'this is a super secret hidden path',
+        },
       ]
 
       this.serverlessMock.service._functionNames = [ 'test', 'blub', 'blib', 'blab' ]
@@ -3576,38 +3576,38 @@ describe('ServerlessAWSDocumentation', function() {
                   description: 'hello hello',
                   unknownProperty: 'should not be displayed',
                   requestBody: {
-                    description: 'is it me'
+                    description: 'is it me',
                   },
                   requestHeaders: [
                     {
                       name: 'x-you',
-                      description: 'are looking for'
+                      description: 'are looking for',
                     },
                     {
                       name: 'x-hello',
-                      description: 'again'
-                    }
+                      description: 'again',
+                    },
                   ],
                   methodResponses: [
                     {
                       statusCode: '200',
                       description: 'This is a good response',
                       responseModels: {
-                        'application/json': 'CreateResponse'
-                      }
+                        'application/json': 'CreateResponse',
+                      },
                     },
                     {
                       statusCode: '400',
-                      description: 'You failed'
+                      description: 'You failed',
                     },
                     {
-                      statusCode: '404'
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                      statusCode: '404',
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blub: {
           events: [
@@ -3619,66 +3619,66 @@ describe('ServerlessAWSDocumentation', function() {
                   queryParams: [
                     {
                       name: 'supername',
-                      description: 'this is your super name'
+                      description: 'this is your super name',
                     },
                     {
                       name: 'not-supername',
-                      description: 'this is not your super name'
-                    }
+                      description: 'this is not your super name',
+                    },
                   ],
                   pathParams: [
                     {
                       name: 'id',
-                      description: 'this is the id'
+                      description: 'this is the id',
                     },
                     {
                       name: 'super-id',
-                      description: 'this is the secret super id'
-                    }
+                      description: 'this is the secret super id',
+                    },
                   ],
                   methodResponses: [
                     {
                       statusCode: '204',
                       description: 'super response',
                       responseBody: {
-                        description: 'hiiiii'
+                        description: 'hiiiii',
                       },
                       responseHeaders: [
                         {
                           name: 'x-header',
-                          description: 'THE header'
+                          description: 'THE header',
                         },
                         {
                           name: 'x-other-header',
-                          description: 'THE other header'
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          ]
+                          description: 'THE other header',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+          ],
         },
         blab: {
           events: [
             {
               http: {
                 path: 'some/other/path',
-                method: 'get'
-              }
-            }
-          ]
+                method: 'get',
+              },
+            },
+          ],
         },
         blib: {
           events: [
             {
               sns: {
-                documentation: {}
-              }
-            }
-          ]
-        }
+                documentation: {},
+              },
+            },
+          ],
+        },
       }
 
       delete this.serverlessMock.variables.service.custom.documentation.version
@@ -3703,9 +3703,9 @@ describe('ServerlessAWSDocumentation', function() {
       this.serverlessMock.service._functions.sup = {
         events: [
           {
-            http: {}
-          }
-        ]
+            http: {},
+          },
+        ],
       }
 
       this.plugin.generateAutoDocumentationVersion()
